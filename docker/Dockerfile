@@ -8,7 +8,7 @@ ENV TZ America/Caracas
 
 # install system dependencies
 RUN apt-get update \
-  && apt-get -y install netcat gcc postgresql telnet \
+  && apt-get -y install netcat gcc postgresql \
   && apt-get clean
 
 # support for certains processors
@@ -24,3 +24,8 @@ COPY ./backend/requirements.txt /backend/requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . /backend
+
+
+COPY ./docker/scripts/entrypoint.sh /usr/src/app/entrypoint.sh
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
