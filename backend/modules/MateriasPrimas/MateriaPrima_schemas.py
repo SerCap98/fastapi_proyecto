@@ -6,13 +6,11 @@ from shared.utils.schemas_base import BaseSchema, DateTimeModelMixin, IDModelMix
 
 # Materias Primas
 class MateriaPrima(BaseSchema):
-    nombre: str | None
-    cantidad: float | None
-    unidad_medida: str | None
+    nombre: Optional[str] = None
+    codigo: Optional[str] = None
 
 
 class MateriaPrimaInDB(MateriaPrima,DateTimeModelMixin,IDModelMixin):
     nombre: str
-    cantidad: float
-    unidad_medida: str
+    codigo: str
 

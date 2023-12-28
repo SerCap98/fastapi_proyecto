@@ -1,11 +1,15 @@
-import logging
-import uuid
+
 from modules.MateriasPrimas.MateriaPrima_exceptions import MateriaPrimaExceptions
 from modules.MateriasPrimas.MateriaPrima_repositories import MateriaPrimaRepository
-from modules.MateriasPrimas.MateriaPrima_schemas import MateriaPrima, MateriaPrimaInDB
+from modules.MateriasPrimas.MateriaPrima_schemas import MateriaPrima
 from shared.utils.service_result import ServiceResult
 from databases import Database
 from uuid import UUID
+
+#import logging
+#logger = logging.getLogger(__name__)
+#logging.basicConfig(level=logging.DEBUG)
+#logger.debug(f"Error: {e}")
 
 class MateriaPrimaService:
     
@@ -20,14 +24,39 @@ class MateriaPrimaService:
         except Exception as e:
             return ServiceResult(e)
 
-    async def get_materia_prima_by_id(self, id: str) -> ServiceResult:
+    async def get_materia_prima_by_code(self, code: str) -> ServiceResult:
         try:
-            uuid_obj = uuid.UUID(id)
-            materia_prima = await MateriaPrimaRepository(self.db).get_materia_prima_by_id(uuid_obj)
+            materia_prima = await MateriaPrimaRepository(self.db).get_materia_prima_by_code(code)
             return ServiceResult(materia_prima)
-        except ValueError:
-            return ServiceResult(MateriaPrimaExceptions.MateriaPrimaInvalidUUIDException())
         except Exception  as e:
             return ServiceResult(e)
 
-    # Aquí puedes implementar métodos adicionales para actualizar, eliminar y listar materias primas
+
+    async def update_materia_prima_by_code(self, code: str, materia_prima_update: MateriaPrima) -> ServiceResult:
+        try:
+            exist=await self.get_materia_prima_by_code(code)
+            if not exist.success:return exist
+            updated_materia_prima = await MateriaPrimaRepository(self.db).update_materia_prima_by_code(code, materia_prima_update)
+            return ServiceResult(updated_materia_prima)
+        except Exception as e:
+            return ServiceResult(e)
+
+
+    async def delete_materia_prima_by_code(self, code: str) -> ServiceResult:
+        try:
+     
+            exist=await self.get_materia_prima_by_code(code)
+            if not exist.success:return exist
+
+            await MateriaPrimaRepository(self.db).delete_materia_prima_by_code(code)
+            return ServiceResult({"message": "Materia prima eliminada exitosamente"})
+        except Exception as e:
+            return ServiceResult(e)
+ 
+    async def get_all_materias_primas(self) -> ServiceResult:
+        try:
+            materias_primas = await MateriaPrimaRepository(self.db).get_all_materias_primas()
+            return ServiceResult(materias_primas)
+        except Exception as e:
+            return ServiceResult(e)            
+        

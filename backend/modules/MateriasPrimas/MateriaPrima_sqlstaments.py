@@ -1,31 +1,31 @@
 
 
 CREATE_MATERIA_PRIMA = """
-    INSERT INTO materias_primas (id, nombre, cantidad, unidad_medida, created_at, updated_at)
-    VALUES (:id, :nombre, :cantidad, :unidad_medida, :created_at, :updated_at)
-    RETURNING id, nombre, cantidad, unidad_medida;
+    INSERT INTO materias_primas (id, nombre, codigo, created_at, updated_at)
+    VALUES (:id, :nombre, :codigo, :created_at, :updated_at)
+    RETURNING id, nombre, codigo;
 """
 
-GET_MATERIA_PRIMA_BY_ID = """
-    SELECT id, nombre, cantidad, unidad_medida, created_at, updated_at
+GET_MATERIA_PRIMA_BY_CODE = """
+    SELECT id, nombre, codigo, created_at, updated_at
     FROM materias_primas
-    WHERE id = :id;
+    WHERE codigo = :codigo;
 """
 
-UPDATE_MATERIA_PRIMA_BY_ID = """
+UPDATE_MATERIA_PRIMA_BY_CODE = """
     UPDATE materias_primas
-    SET nombre = :nombre, cantidad = :cantidad, unidad_medida = :unidad_medida, updated_at = :updated_at
-    WHERE id = :id
-    RETURNING id, nombre, cantidad, unidad_medida;
+    SET nombre = :nombre, codigo = :codigo, updated_at = :updated_at
+    WHERE codigo = :codigo
+    RETURNING id, nombre, codigo,updated_at;
 """
 
-DELETE_MATERIA_PRIMA_BY_ID = """
+DELETE_MATERIA_PRIMA_BY_CODE = """
     DELETE FROM materias_primas
-    WHERE id = :id
-    RETURNING id;
+    WHERE codigo = :codigo
+    RETURNING codigo;
 """
 
 LIST_MATERIAS_PRIMAS = """
-    SELECT id, nombre, cantidad, unidad_medida, created_at, updated_at
+    SELECT id, nombre, codigo, created_at, updated_at
     FROM materias_primas;
 """
