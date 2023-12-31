@@ -38,7 +38,7 @@ async def get_materia_prima_by_code(
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 ):
-    if not is_authorized(current_user, "MateriaPrima:get-MateriaPrima"):
+    if not is_authorized(current_user, "MateriaPrima:get-MateriaPrima-by-code"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
         result = await MateriaPrimaService(db).get_materia_prima_by_code(codigo)
@@ -75,7 +75,7 @@ async def update_materia_prima_by_code(
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 ):
-    if not is_authorized(current_user, "MateriaPrima:update-MateriaPrima"):
+    if not is_authorized(current_user, "MateriaPrima:update-MateriaPrima-by-code"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
         result = await MateriaPrimaService(db).update_materia_prima_by_code(codigo, materia_prima_update)
