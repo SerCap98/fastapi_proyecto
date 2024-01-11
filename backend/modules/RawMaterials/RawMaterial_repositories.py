@@ -31,8 +31,7 @@ class RawMaterialRepository(BaseRepository):
             "id": raw_material_id,
             "name": raw_material.name,
             "code": raw_material.code,
-            "created_at": current_time,
-            "updated_at": current_time
+            "created_at": current_time
         }
 
         try:
