@@ -1,7 +1,7 @@
 
-from backend.modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
-from backend.modules.RawMaterials.RawMaterial_repositories import RawMaterialRepository
-from backend.modules.RawMaterials.RawMaterial_schemas import RawMaterial
+from modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
+from modules.RawMaterials.RawMaterial_repositories import RawMaterialRepository
+from modules.RawMaterials.RawMaterial_schemas import RawMaterial
 from shared.utils.service_result import ServiceResult
 from databases import Database
 from uuid import UUID

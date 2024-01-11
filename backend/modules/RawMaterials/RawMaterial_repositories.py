@@ -4,8 +4,8 @@ from typing import List, Type
 from uuid import UUID
 import uuid
 
-from backend.modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
-from backend.modules.RawMaterials.RawMaterial_schemas import RawMaterial,RawMaterialInDB
+from modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
+from modules.RawMaterials.RawMaterial_schemas import RawMaterial,RawMaterialInDB
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 

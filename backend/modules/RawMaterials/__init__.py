@@ -1,7 +1,7 @@
 
 from fastapi import APIRouter
 
-from backend.modules.RawMaterials.RawMaterial_routes import router as raw_material_router
+from modules.RawMaterials.RawMaterial_routes import router as raw_material_router
 
 raw_materials_router = APIRouter(
     prefix="/raw-materials",
