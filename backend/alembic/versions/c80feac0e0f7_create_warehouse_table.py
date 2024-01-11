@@ -31,6 +31,7 @@ def create_warehouse_table():
         sa.Column("updated_by", UUID(as_uuid=True), nullable=True),
         sa.Column("updated_at", sa.DateTime, nullable=True)
     )
+    op.create_unique_constraint('unique_type_type_num', 'warehouse', ['type', 'type_num'])
 
 def upgrade() -> None:
     create_warehouse_table()

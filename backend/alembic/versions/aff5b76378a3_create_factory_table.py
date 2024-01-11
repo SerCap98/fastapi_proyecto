@@ -20,7 +20,7 @@ def create_factory_table():
     op.create_table(
         "factory",
         sa.Column("id", UUID(as_uuid=True), primary_key=True, default=uuid4),
-        sa.Column("identifier", sa.Text, nullable=False),
+        sa.Column("identifier", sa.Text, nullable=False,unique=True),
         sa.Column("created_by", UUID(as_uuid=True), nullable=False),
         sa.Column("created_at", sa.DateTime, nullable=False),
         sa.Column("updated_by", UUID(as_uuid=True), nullable=True),

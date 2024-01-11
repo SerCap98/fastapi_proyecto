@@ -21,7 +21,7 @@ def create_product_table():
     op.create_table(
         "product",
         sa.Column("id", UUID, primary_key=True, default=uuid4()),
-        sa.Column("name", sa.Text, nullable=False),
+        sa.Column("name", sa.Text, nullable=False,unique=True),
         sa.Column("cost_per_bag", sa.Float, nullable=False),        
         sa.Column("created_by", UUID(as_uuid=True), nullable=False),
         sa.Column("created_at", sa.DateTime, nullable=False),

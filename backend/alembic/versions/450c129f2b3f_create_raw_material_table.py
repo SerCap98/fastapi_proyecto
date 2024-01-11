@@ -21,7 +21,7 @@ def create_raw_material_table():
     op.create_table(
         "raw_material",
         sa.Column("id", UUID(as_uuid=True), primary_key=True, default=uuid4),
-        sa.Column("name", sa.Text, nullable=False),
+        sa.Column("name", sa.Text, nullable=False,unique=True),
         sa.Column("code", sa.Text, nullable=False,unique=True),
         sa.Column("created_by", UUID, nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
