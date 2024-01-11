@@ -5,12 +5,12 @@ from pydantic import BaseModel, constr
 from shared.utils.schemas_base import BaseSchema, DateTimeModelMixin, IDModelMixin
 
 # Materias Primas
-class MateriaPrima(BaseSchema):
-    nombre: Optional[str] = None
-    codigo: Optional[str] = None
+class RawMaterial(BaseSchema):
+    name: Optional[str] = None
+    code: Optional[str] = None
 
 
-class MateriaPrimaInDB(MateriaPrima,DateTimeModelMixin,IDModelMixin):
-    nombre: str
-    codigo: str
+class RawMaterialInDB(RawMaterial,DateTimeModelMixin,IDModelMixin):
+    name: str
+    code: str
 

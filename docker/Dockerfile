@@ -25,7 +25,3 @@ RUN pip install -r requirements.txt
 
 COPY . /backend
 
-
-COPY ./docker/scripts/entrypoint.sh /usr/src/app/entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
-

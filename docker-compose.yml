@@ -10,7 +10,7 @@ services:
         ARCH: ${ARCH}
     volumes:
       - ./backend/:/backend/
-    command: /docker/scripts/entrypoint.sh
+    command: uvicorn shared.core.server:app --reload --workers 1 --host 0.0.0.0 --port 8000
     env_file:
       - ./backend/.env
     ports:
