@@ -51,7 +51,7 @@ class RawMaterialRepository(BaseRepository):
 
     async def get_raw_material_by_code(self, code: str) -> RawMaterialInDB:
         from modules.RawMaterials.RawMaterial_sqlstaments import GET_RAW_MATERIAL_BY_CODE
-        values = {"code": code}
+        values = {"code": code.upper()}
         record = await self.db.fetch_one(query=GET_RAW_MATERIAL_BY_CODE, values=values)
         if not record:
             raise RawMaterialExceptions.RawMaterialNotFoundException()
@@ -67,8 +67,8 @@ class RawMaterialRepository(BaseRepository):
             "updated_at": datetime.now()
         }
         try:
-            record = await self.db.fetch_one(query=UPDATE_RAW_MATERIAL_BY_CODE, values={**updated_values, "original_code": exist_raw_material.value.code})
-            
+            record = await self.db.fetch_one(query=UPDATE_RAW_MATERIAL_BY_CODE, values={**updated_values, "original_code": exist_raw_material.value.code.upper()})
+
             return self._schema_out(**dict(record))
         except Exception as e:
             raise RawMaterialExceptions.RawMaterialInvalidUpdateParamsException(e=e)
@@ -86,7 +86,7 @@ class RawMaterialRepository(BaseRepository):
         order: str | None,
         direction: str | None
         ) -> List:
-        
+
         from modules.RawMaterials.RawMaterial_sqlstaments import LIST_RAW_MATERIALS,RAW_MATERIALS_COMPLEMENTS,RAW_MATERIALS_SEARCH
 
         order = order.lower() if order != None else None
