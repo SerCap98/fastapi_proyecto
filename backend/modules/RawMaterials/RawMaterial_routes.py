@@ -22,7 +22,7 @@ async def create_raw_material(
     raw_material: RawMaterial = Body(..., embed=True),  
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
-):
+)-> ServiceResult:
     if not is_authorized(current_user, "RawMaterial:create-RawMaterial"):
         raise AuthExceptions.AuthUnauthorizedException()
     
@@ -37,7 +37,7 @@ async def get_raw_material_by_code(
     code: str = Path(..., title="The code of the raw material to retrieve"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
-):
+)-> ServiceResult:
     if not is_authorized(current_user, "RawMaterial:get-RawMaterial-by-code"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
@@ -47,14 +47,24 @@ async def get_raw_material_by_code(
 
 @router.get("/all/", name="RawMaterial:get-all-RawMaterials",response_model=Dict,status_code=status.HTTP_200_OK)
 async def get_all_raw_materials(
+    search: str | None = None,
+    page_number: int = 1,
+    page_size: int = 10,
+    order: str = "",
+    direction: str = "",
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
-    ):
+)-> ServiceResult:
     if not is_authorized(current_user, "RawMaterial:get-all-RawMaterials"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
        
-        result = await RawMaterialService(db).get_all_raw_materials()
+        result = await RawMaterialService(db).get_all_raw_materials( 
+        search,
+        page_num=page_number,
+        page_size=page_size,
+        order=order,
+        direction=direction,)
         return handle_result(result)
 
 @router.delete("/{code}", response_model=dict, name="RawMaterial:delete-RawMaterial-by-code",status_code=status.HTTP_200_OK)
@@ -62,7 +72,7 @@ async def delete_raw_material_by_code(
     code: str = Path(..., title="The code of the raw material to delete"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
-):
+)-> ServiceResult:
     if not is_authorized(current_user, "RawMaterial:delete-RawMaterial"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
@@ -75,7 +85,7 @@ async def update_raw_material_by_code(
     raw_material_update: RawMaterial = Body(..., embed=True),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
-):
+)-> ServiceResult:
     if not is_authorized(current_user, "RawMaterial:update-RawMaterial-by-code"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :

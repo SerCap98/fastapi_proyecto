@@ -13,5 +13,5 @@ class RawMaterial(BaseSchema):
 class RawMaterialInDB(RawMaterial,DateTimeModelMixin,IDModelMixin):
     name: str
     code: str
-    created_by: UUID | None
-    updated_by: UUID | None
+    created_by: UUID | str |  None
+    updated_by: UUID | str |  None

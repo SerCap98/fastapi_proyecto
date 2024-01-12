@@ -1,4 +1,6 @@
 
+from shared.core.config import API_PREFIX
+from shared.utils.short_pagination import short_pagination
 from modules.users.users.user_schemas import UserInDB
 from modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
 from modules.RawMaterials.RawMaterial_repositories import RawMaterialRepository
@@ -52,12 +54,24 @@ class RawMaterialService:
         except Exception as e:
             return ServiceResult(e)
  
-    async def get_all_raw_materials(self) -> ServiceResult:
+    async def get_all_raw_materials(self, 
+        search: str | None,
+        page_num: int = 1,
+        page_size: int = 10,
+        order: str = None,
+        direction: str = None,
+    ) -> ServiceResult:
         try:
      
-            raw_materials = await RawMaterialRepository(self.db).get_all_raw_material()
-    
-            return ServiceResult(raw_materials)
+            raw_materials = await RawMaterialRepository(self.db).get_all_raw_material(search,order,direction)
+            raw_materials_list = [RawMaterial(**item.dict()) for item in raw_materials]
+            response = short_pagination(
+                page_num=page_num,
+                page_size=page_size,
+                data_list=raw_materials_list,
+                route=f"{API_PREFIX}/raw-materials",
+            )
+            return ServiceResult(response)
         except Exception as e:
             
             return ServiceResult(e)

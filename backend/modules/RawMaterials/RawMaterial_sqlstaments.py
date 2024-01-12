@@ -26,6 +26,29 @@ DELETE_RAW_MATERIAL_BY_CODE = """
 """
 
 LIST_RAW_MATERIALS = """
-    SELECT id, name, code, created_by, created_at, updated_by, updated_at
-    FROM raw_material;
+    SELECT raw.id, raw.name, raw.code, raw.created_by, raw.created_at, raw.updated_by, raw.updated_at,
+        us1.fullname AS created_by, us2.fullname AS updated_by
+    FROM raw_material AS raw
+    LEFT JOIN users AS us1 ON us1.id = raw.created_by
+    LEFT JOIN users AS us2 ON us2.id = raw.updated_by
 """
+
+def RAW_MATERIALS_COMPLEMENTS(order: str | None, direction: str | None):
+    sql_sentence = ""
+    if not order and not direction:
+        sql_sentence = " ORDER BY raw.name ASC;"
+    elif order == "name" and direction == "DESC":
+        sql_sentence = " ORDER BY raw.name DESC;"
+    elif order == "name" and (direction == "ASC" or direction == None):
+        sql_sentence = " ORDER BY raw.name ASC;"
+    elif order == "code" and direction == "DESC":
+        sql_sentence = " ORDER BY raw.code DESC;"
+    elif order == "code" and (direction == "ASC" or direction == None):
+        sql_sentence = " ORDER BY raw.code ASC;"
+
+    return sql_sentence
+
+
+def RAW_MATERIALS_SEARCH():
+    return """ WHERE (raw.name LIKE :search 
+        or raw.code ILIKE :search  """

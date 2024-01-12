@@ -68,6 +68,7 @@ class RawMaterialRepository(BaseRepository):
         }
         try:
             record = await self.db.fetch_one(query=UPDATE_RAW_MATERIAL_BY_CODE, values={**updated_values, "original_code": exist_raw_material.value.code})
+            
             return self._schema_out(**dict(record))
         except Exception as e:
             raise RawMaterialExceptions.RawMaterialUpdateException()
@@ -80,14 +81,32 @@ class RawMaterialRepository(BaseRepository):
             raise RawMaterialExceptions.RawMaterialDeletionException()
         return True
 
-    async def get_all_raw_material(self) -> List[RawMaterialInDB]:
+    async def get_all_raw_material(self,
+        search: str | None,
+        order: str | None,
+        direction: str | None
+        ) -> List:
         
-        from modules.RawMaterials.RawMaterial_sqlstaments import LIST_RAW_MATERIALS
-    
+        from modules.RawMaterials.RawMaterial_sqlstaments import LIST_RAW_MATERIALS,RAW_MATERIALS_COMPLEMENTS,RAW_MATERIALS_SEARCH
+
+        order = order.lower() if order != None else None
+        direction = direction.upper() if order != None else None
+        values = {}
+        sql_sentence = RAW_MATERIALS_COMPLEMENTS(order, direction)
+        sql_search = RAW_MATERIALS_SEARCH()
+        if not search:
+            sql_sentence = LIST_RAW_MATERIALS + sql_sentence
+        else:
+            sql_sentence = LIST_RAW_MATERIALS + sql_search + sql_sentence
+            values["search"] = "%" + search + "%"
         try:
-            records = await self.db.fetch_all(query=LIST_RAW_MATERIALS)
-            records = [self._schema_out(**dict(record)) for record in records]
-            print(records)
+           
+            records = await self.db.fetch_all(query=sql_sentence,values=values)
+            if len(records) == 0 or not records:
+                return []
+
             return [self._schema_out(**dict(record)) for record in records]
+        
+
         except Exception as e:
             raise RawMaterialExceptions.RawMaterialListException
