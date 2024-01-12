@@ -9,26 +9,26 @@ from modules.RawMaterials.RawMaterial_schemas import RawMaterial, RawMaterialInD
 from modules.RawMaterials.RawMaterial_services import RawMaterialService
 from shared.utils.service_result import ServiceResult, handle_result
 from shared.core.db.db_dependencies import get_database
-from typing import List
+from typing import List,Dict
 from modules.users.users.user_schemas import  UserInDB
-
 
 
 router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/", response_model=RawMaterialInDB,name="RawMaterial:create-RawMaterial", status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=RawMaterialInDB, name="RawMaterial:create-RawMaterial", status_code=status.HTTP_201_CREATED)
 async def create_raw_material(
-    raw_material: RawMaterial = Body(..., embed=True),
+    raw_material: RawMaterial = Body(..., embed=True),  
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 ):
     if not is_authorized(current_user, "RawMaterial:create-RawMaterial"):
-        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
-    else :
-        result = await RawMaterialService(db).create_raw_material(raw_material)
-        return handle_result(result)
+        raise AuthExceptions.AuthUnauthorizedException()
+    
+    
+    result = await RawMaterialService(db).create_raw_material(raw_material,current_user)
+    return handle_result(result)
 
 
 
@@ -45,7 +45,7 @@ async def get_raw_material_by_code(
         return handle_result(result)
 
 
-@router.get("/all/", name="RawMaterial:get-all-RawMaterials",response_model=List[RawMaterialInDB],status_code=status.HTTP_200_OK)
+@router.get("/all/", name="RawMaterial:get-all-RawMaterials",response_model=Dict,status_code=status.HTTP_200_OK)
 async def get_all_raw_materials(
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
@@ -53,6 +53,7 @@ async def get_all_raw_materials(
     if not is_authorized(current_user, "RawMaterial:get-all-RawMaterials"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
+       
         result = await RawMaterialService(db).get_all_raw_materials()
         return handle_result(result)
 
@@ -78,5 +79,5 @@ async def update_raw_material_by_code(
     if not is_authorized(current_user, "RawMaterial:update-RawMaterial-by-code"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
-        result = await RawMaterialService(db).update_raw_material_by_code(code, raw_material_update)
+        result = await RawMaterialService(db).update_raw_material_by_code(code, raw_material_update,current_user)
         return handle_result(result)
