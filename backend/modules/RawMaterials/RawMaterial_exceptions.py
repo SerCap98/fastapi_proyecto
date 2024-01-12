@@ -35,12 +35,12 @@ class RawMaterialExceptions:
     class RawMaterialInvalidUpdateParamsException(AppExceptionCase):
         def __init__(self, msg: str = "", e: Any = None):
             status_code = 422
-            msg = f"Parámetros de actualización inválidos para materia prima: {str(e)}"
+            msg = str(e)
             AppExceptionCase.__init__(self, status_code, msg)
     class RawMaterialInvalidCreateParamsException(AppExceptionCase):
         def __init__(self, msg: str = "", e: Any = None):
             status_code = 422
-            msg = f"Parámetros de creacion inválidos para materia prima: {str(e)}"
+            msg = str(e)
             AppExceptionCase.__init__(self, status_code, msg)
 
     class RawMaterialListException(AppExceptionCase):

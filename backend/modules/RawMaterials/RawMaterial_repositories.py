@@ -27,24 +27,24 @@ class RawMaterialRepository(BaseRepository):
 
     async def create_raw_material(self, raw_material: RawMaterial,current_user: UserInDB) -> RawMaterialInDB:
         from modules.RawMaterials.RawMaterial_sqlstaments import CREATE_RAW_MATERIAL
-
+       
         raw_material_id = str(uuid.uuid4())
         current_time = datetime.now()
-        raw_material.name = raw_material.name.upper()
-        raw_material.code = raw_material.code.upper()
-
+        print(raw_material_id)
+        
         values = {
-            "id": raw_material_id,
-            "name": raw_material.name,
-            "code": raw_material.code,
+            "id": raw_material_id ,
+            "name": raw_material.name.upper() if raw_material.name else None,
+            "code": raw_material.code.upper() if raw_material.code else None,
             "created_by": current_user.id,
             "created_at": current_time
-        }
-
+            }
+        print(values)
         try:
+            print(values)
             record = await self.db.fetch_one(query=CREATE_RAW_MATERIAL, values=values)
         except Exception as e:
-            raise RawMaterialExceptions.RawMaterialCreationException()
+            raise RawMaterialExceptions.RawMaterialInvalidCreateParamsException(e=e)
 
         result = record_to_dict(record)
         return self._schema_out(**result)
@@ -71,7 +71,7 @@ class RawMaterialRepository(BaseRepository):
             
             return self._schema_out(**dict(record))
         except Exception as e:
-            raise RawMaterialExceptions.RawMaterialUpdateException()
+            raise RawMaterialExceptions.RawMaterialInvalidUpdateParamsException(e=e)
 
     async def delete_raw_material_by_code(self, code: str):
         from modules.RawMaterials.RawMaterial_sqlstaments import DELETE_RAW_MATERIAL_BY_CODE
