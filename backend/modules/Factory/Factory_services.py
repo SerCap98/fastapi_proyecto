@@ -53,7 +53,7 @@ class FactoryService:
         except Exception as e:
             return ServiceResult(e)
  
-    async def get_all_factory(self) -> ServiceResult:
+    async def get_all_factories(self) -> ServiceResult:
         try:
             factory = await FactoryRepository(self.db).get_all_factory()
             return ServiceResult(factory)

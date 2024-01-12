@@ -72,10 +72,10 @@ class FactoryRepository(BaseRepository):
         return True
 
     async def get_all_factories(self) -> List[FactoryInDB]:
-        from backend.modules.Factory.Factory_sqlstaments import LIST_FACTORIES
+        from backend.modules.Factory.Factory_sqlstaments import LIST_FACTORY
 
         try:
-            records = await self.db.fetch_all(query=LIST_FACTORIES)
+            records = await self.db.fetch_all(query=LIST_FACTORY)
             return [self._schema_out(**dict(record)) for record in records]
         except Exception as e:
             raise FactoryExceptions.FactoryListException

@@ -25,7 +25,7 @@ DELETE_FACTORY_BY_IDENTIFIER = """
     RETURNING identifier;
 """
 
-LIST_FACTORIES = """
+LIST_FACTORY = """
     SELECT id, name, identifier, created_at, updated_at
     FROM factory;
 """
