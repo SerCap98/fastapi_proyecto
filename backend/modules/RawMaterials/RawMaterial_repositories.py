@@ -25,15 +25,9 @@ class RawMaterialRepository(BaseRepository):
     def _schema_out(self) -> Type[RawMaterialInDB]:
         return RawMaterialInDB
 
-<<<<<<< HEAD
-    async def create_raw_material(self, raw_material: RawMaterial) -> RawMaterialInDB:
-        from backend.modules.RawMaterials.RawMaterial_sqlstaments import CREATE_RAW_MATERIAL
-
-=======
     async def create_raw_material(self, raw_material: RawMaterial,current_user: UserInDB) -> RawMaterialInDB:
         from modules.RawMaterials.RawMaterial_sqlstaments import CREATE_RAW_MATERIAL
        
->>>>>>> 59e2aa5ca1a051923260c54de5e5160aaf123fbf
         raw_material_id = str(uuid.uuid4())
         current_time = datetime.now()
         print(raw_material_id)
@@ -87,10 +81,6 @@ class RawMaterialRepository(BaseRepository):
             raise RawMaterialExceptions.RawMaterialDeletionException()
         return True
 
-<<<<<<< HEAD
-    async def get_all_raw_materials(self) -> List[RawMaterialInDB]:
-        from backend.modules.RawMaterials.RawMaterial_sqlstaments import LIST_RAW_MATERIALS
-=======
     async def get_all_raw_material(self,
         search: str | None,
         order: str | None,
@@ -98,7 +88,6 @@ class RawMaterialRepository(BaseRepository):
         ) -> List:
         
         from modules.RawMaterials.RawMaterial_sqlstaments import LIST_RAW_MATERIALS,RAW_MATERIALS_COMPLEMENTS,RAW_MATERIALS_SEARCH
->>>>>>> 59e2aa5ca1a051923260c54de5e5160aaf123fbf
 
         order = order.lower() if order != None else None
         direction = direction.upper() if order != None else None

@@ -18,14 +18,9 @@ class RawMaterialService:
     async def create_raw_material(self, raw_material: RawMaterial,current_user: UserInDB) -> ServiceResult:
         raw_material_repo = RawMaterialRepository(self.db)
         try:
-<<<<<<< HEAD
-            new_raw_material = await raw_material_repo.create_raw_material(raw_material)
-            return ServiceResult(new_raw_material)
-=======
             new_raw_material = await raw_material_repo.create_raw_material(raw_material,current_user)
             return ServiceResult(new_raw_material,)
         
->>>>>>> 59e2aa5ca1a051923260c54de5e5160aaf123fbf
         except Exception as e:
             return ServiceResult(e)
 
