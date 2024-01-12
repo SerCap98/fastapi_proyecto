@@ -19,7 +19,7 @@ class RawMaterialRepository(BaseRepository):
     def _schema_out(self) -> Type[RawMaterialInDB]:
         return RawMaterialInDB
 
-    async def create_materia_prima(self, raw_material: RawMaterial) -> RawMaterialInDB:
+    async def create_raw_material(self, raw_material: RawMaterial) -> RawMaterialInDB:
         from backend.modules.RawMaterials.RawMaterial_sqlstaments import CREATE_RAW_MATERIAL
 
         raw_material_id = str(uuid.uuid4())
@@ -73,7 +73,7 @@ class RawMaterialRepository(BaseRepository):
             raise RawMaterialExceptions.RawMaterialDeletionException()
         return True
 
-    async def get_all_materias_primas(self) -> List[RawMaterialInDB]:
+    async def get_all_raw_material(self) -> List[RawMaterialInDB]:
         from backend.modules.RawMaterials.RawMaterial_sqlstaments import LIST_RAW_MATERIALS
 
         try:
