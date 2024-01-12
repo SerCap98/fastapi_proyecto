@@ -35,16 +35,22 @@ class FactoryExceptions:
     class FactoryInvalidUpdateParamsException(AppExceptionCase):
         def __init__(self, msg: str = "", e: Any = None):
             status_code = 422
-            msg = f"Parámetros de actualización inválidos para fábrica: {str(e)}"
+            msg = str(e)
             AppExceptionCase.__init__(self, status_code, msg)
     class FactoryInvalidCreateParamsException(AppExceptionCase):
         def __init__(self, msg: str = "", e: Any = None):
             status_code = 422
-            msg = f"Parámetros de creacion inválidos para fábrica: {str(e)}"
+            msg = str(e)
+            AppExceptionCase.__init__(self, status_code, msg)
+
+    class FactoryListException(AppExceptionCase):
+        def __init__(self, msg: str = ""):
+            status_code = 500
+            msg = "No se pudo recuperar la lista de fábricas"
             AppExceptionCase.__init__(self, status_code, msg)
 
     class FactoryInvalidUUIDException(AppExceptionCase):
         def __init__(self, msg: str = ""):
             status_code = 422
-            msg = "UUID Inválido"
+            msg = "UUID Invalido"
             AppExceptionCase.__init__(self, status_code, msg)

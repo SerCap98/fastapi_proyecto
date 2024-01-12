@@ -69,7 +69,7 @@ class AuthExceptions:
 
     class AuthRestPswTokenExpiredException(AppExceptionCase):
         """_
-        Token de reset de passwaord está vencido
+        Token de reset de password está vencido
         """
 
         def __init__(self, msg: str = ""):  # context: dict = None):
@@ -80,7 +80,7 @@ class AuthExceptions:
 
     class AuthRestPswTokenUsedException(AppExceptionCase):
         """_
-        Token de reset de passwaord ha sido usado
+        Token de reset de password ha sido usado
         """
 
         def __init__(self, msg: str = ""):  # context: dict = None):
