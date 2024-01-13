@@ -8,7 +8,7 @@ from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
 from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_exceptions import FactoryRawMaterialInventoryExceptions
-from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_schemas import FactoryRawMaterialInventory,FactoryRawMaterialInventoryInDB
+from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_schemas import FactoryRawMaterialInventory,FactoryRawMaterialInventoryInDB,FactoryRawMaterialInventoryList
 
 #import logging
 #logger = logging.getLogger(__name__)
@@ -46,7 +46,7 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
             record = await self.db.fetch_one(query=CREATE_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
 
         except Exception as e:
-            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e=e)
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
 
         result = record_to_dict(record)
         return self._schema_out(**result)
@@ -63,6 +63,57 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
             raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialNotFoundException()
         return self._schema_out(**dict(record))
     
+    async def increase_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,increase_quantity:float) -> FactoryRawMaterialInventoryInDB:
+        from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import INCREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY 
+        current_time = datetime.now()
+        try:
+            values = {
+                "factory": factory ,
+                "raw_material": raw_material,
+                "quantity":increase_quantity,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=INCREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
+        except Exception as e:
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+        return self._schema_out(**dict(record))
+    
+    async def decrease_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,decrease_quantity:float) -> FactoryRawMaterialInventoryInDB:
+        from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import DECREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY 
+        current_time = datetime.now()
+        try:
+            values = {
+                "factory": factory ,
+                "raw_material": raw_material,
+                "quantity":decrease_quantity,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=DECREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
+        except Exception as e:
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+        return self._schema_out(**dict(record))
+    
+    async def update_min_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,new_min_quantity:float) -> FactoryRawMaterialInventoryInDB:
+        from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import UPDATE_MIN_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY 
+        current_time = datetime.now()
+        try:
+            values = {
+                "factory": factory ,
+                "raw_material": raw_material,
+                "min_quantity":new_min_quantity,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=UPDATE_MIN_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
+        except Exception as e:
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+        return self._schema_out(**dict(record))
+    
     async def delete_inventory_by_Factory_and_RawMaterial(self,raw_material:UUID ,factory:UUID) -> bool:
         from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import DELETE_FACTORY_RAW_MATERIAL_INVENTORY 
         try:
@@ -75,3 +126,32 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
         except Exception as e:
             raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialDeleteException()
         return True
+    
+    async def get_all_inventory(self,
+        search: str | None,
+        order: str | None,
+        direction: str | None
+        ) -> List:
+        from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import LIST_INVENTORY,INVENTORY_COMPLEMENTS,INVENTORY_SEARCH
+
+        order = order.lower() if order != None else None
+        direction = direction.upper() if order != None else None
+        values = {}
+        sql_sentence = INVENTORY_COMPLEMENTS(order, direction)
+        sql_search = INVENTORY_SEARCH()
+        if not search:
+            sql_sentence = LIST_INVENTORY + sql_sentence
+        else:
+            sql_sentence = LIST_INVENTORY + sql_search + sql_sentence
+            values["search"] = "%" + search + "%"
+        try:
+           
+            records = await self.db.fetch_all(query=sql_sentence,values=values)
+            if len(records) == 0 or not records:
+                return []
+            return [FactoryRawMaterialInventoryList(**dict(record)) for record in records]
+        
+
+        except Exception as e:
+            print(f"Error: {e}")
+            raise FactoryRawMaterialInventoryExceptions.InventoryListException()

@@ -42,7 +42,7 @@ class FactoryRawMaterialInventoryService:
         except Exception as e:
             return ServiceResult(e)
         
-    async def get_inventory_by_Factory_and_RawMaterial(self, factory_identifier: str, raw_material_code: str) -> ServiceResult:
+    async def get_inventory_by_factory_and_material(self, factory_identifier: str, raw_material_code: str) -> ServiceResult:
         try:
 
             exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
@@ -57,8 +57,53 @@ class FactoryRawMaterialInventoryService:
         except Exception  as e:
 
             return ServiceResult(e)
+        
+    async def increase_quantity_by_factory_and_material(self,current_user: UserInDB,factory_identifier: str, raw_material_code: str,increase_quantity:float) -> ServiceResult:
+        try:
 
-    async def delete_inventory_by_Factory_and_RawMaterial(self, factory_identifier: str, raw_material_code: str) -> ServiceResult:
+            exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
+            if not exist_factory_and_raw_material.success:
+                return exist_factory_and_raw_material
+            
+            raw_material_id=uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
+            factory_id=uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
+
+            inventory = await FactoryRawMaterialInventoryRepository(self.db).increase_quantity_by_factory_and_material(current_user,raw_material_id,factory_id,increase_quantity)
+            return ServiceResult(inventory)
+        except Exception  as e:
+            return ServiceResult(e)
+        
+    async def decrease_quantity_by_factory_and_material(self,current_user: UserInDB,factory_identifier: str, raw_material_code: str,decrease_quantity:float) -> ServiceResult:
+        try:
+
+            exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
+            if not exist_factory_and_raw_material.success:
+                return exist_factory_and_raw_material
+            
+            raw_material_id=uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
+            factory_id=uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
+
+            inventory = await FactoryRawMaterialInventoryRepository(self.db).decrease_quantity_by_factory_and_material(current_user,raw_material_id,factory_id,decrease_quantity)
+            return ServiceResult(inventory)
+        except Exception  as e:
+            return ServiceResult(e)
+        
+    async def update_min_quantity_by_factory_and_material(self,current_user: UserInDB,factory_identifier: str, raw_material_code: str,update_min_quantity:float) -> ServiceResult:
+        try:
+
+            exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
+            if not exist_factory_and_raw_material.success:
+                return exist_factory_and_raw_material
+            
+            raw_material_id=uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
+            factory_id=uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
+
+            inventory = await FactoryRawMaterialInventoryRepository(self.db).update_min_quantity_by_factory_and_material(current_user,raw_material_id,factory_id,update_min_quantity)
+            return ServiceResult(inventory)
+        except Exception  as e:
+            return ServiceResult(e)
+
+    async def delete_inventory_by_factory_and_material(self, factory_identifier: str, raw_material_code: str) -> ServiceResult:
         try:
 
             exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
@@ -95,3 +140,24 @@ class FactoryRawMaterialInventoryService:
         except Exception as e:
             return ServiceResult(e)
 
+    async def get_all_inventory(self, 
+            search: str | None,
+            page_num: int = 1,
+            page_size: int = 10,
+            order: str = None,
+            direction: str = None,
+        ) -> ServiceResult:
+            try:
+                
+                inventory = await FactoryRawMaterialInventoryRepository(self.db).get_all_inventory(search,order,direction)
+                inventory_list = [FactoryRawMaterialInventory(**item.dict()) for item in inventory]
+                response = short_pagination(
+                    page_num=page_num,
+                    page_size=page_size,
+                    data_list=inventory_list,
+                    route=f"{API_PREFIX}/inventory",
+                )
+                return ServiceResult(response)
+            except Exception as e:
+                
+                return ServiceResult(e)

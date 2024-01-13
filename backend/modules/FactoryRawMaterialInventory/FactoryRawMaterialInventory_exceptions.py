@@ -22,3 +22,8 @@ class FactoryRawMaterialInventoryExceptions:
             msg = "Error deleting record"
             AppExceptionCase.__init__(self, status_code, msg)
 
+    class InventoryListException(AppExceptionCase):
+        def __init__(self, msg: str = ""):
+            status_code = 500
+            msg = "Could not retrieve list"
+            AppExceptionCase.__init__(self, status_code, msg)
