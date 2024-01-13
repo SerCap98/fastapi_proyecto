@@ -4,8 +4,8 @@ from fastapi import APIRouter
 from modules.Product.Product_routes import router as product_router
 
 products_router = APIRouter(
-    prefix="/product",
-    tags=["product"],
+    prefix="/products",
+    tags=["products"],
     responses={404: {"description": "Not found"}},
 )
 

@@ -25,8 +25,7 @@ async def create_product(
 )-> ServiceResult:
     if not is_authorized(current_user, "Product:create-Product"):
         raise AuthExceptions.AuthUnauthorizedException()
-    
-    
+
     result = await ProductService(db).create_product(product,current_user)
     return handle_result(result)
 
