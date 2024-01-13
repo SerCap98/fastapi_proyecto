@@ -29,7 +29,8 @@ def create_factory_raw_material_inventory_table():
         sa.Column("created_by", UUID(as_uuid=True), nullable=False),
         sa.Column("created_at", sa.DateTime, nullable=False),
         sa.Column("updated_by", UUID(as_uuid=True), nullable=True),
-        sa.Column("updated_at", sa.DateTime, nullable=True)
+        sa.Column("updated_at", sa.DateTime, nullable=True),
+        sa.UniqueConstraint("id_factory", "id_raw_material", name="uq_factory_raw_material")
     )
 
 def upgrade() -> None:

@@ -11,9 +11,7 @@ from modules.Product.Product_schemas import Product,ProductInDB
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
-import logging
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
+
 
 
 class ProductRepository(BaseRepository):
