@@ -36,6 +36,14 @@ INCREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY = """
     WHERE id_factory = :factory AND id_raw_material = :raw_material
     RETURNING id, id_factory, id_raw_material, min_quantity, quantity, created_by, created_at, updated_by, updated_at;
 """
+UPDATE_MIN_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY = """
+    UPDATE factory_raw_material_inventory
+    SET min_quantity = :min_quantity,
+        updated_at = :updated_at,
+        updated_by = :updated_by
+    WHERE id_factory = :factory AND id_raw_material = :raw_material
+    RETURNING id, id_factory, id_raw_material, min_quantity, quantity, created_by, created_at, updated_by, updated_at;
+"""
 
 DECREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY = """
     UPDATE factory_raw_material_inventory

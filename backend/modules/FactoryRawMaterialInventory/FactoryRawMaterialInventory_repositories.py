@@ -97,6 +97,23 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
             raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
         return self._schema_out(**dict(record))
     
+    async def update_min_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,new_min_quantity:float) -> FactoryRawMaterialInventoryInDB:
+        from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import UPDATE_MIN_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY 
+        current_time = datetime.now()
+        try:
+            values = {
+                "factory": factory ,
+                "raw_material": raw_material,
+                "min_quantity":new_min_quantity,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=UPDATE_MIN_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
+        except Exception as e:
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+        return self._schema_out(**dict(record))
+    
     async def delete_inventory_by_Factory_and_RawMaterial(self,raw_material:UUID ,factory:UUID) -> bool:
         from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import DELETE_FACTORY_RAW_MATERIAL_INVENTORY 
         try:
@@ -132,8 +149,6 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
             records = await self.db.fetch_all(query=sql_sentence,values=values)
             if len(records) == 0 or not records:
                 return []
-            print(records)
-            result=[FactoryRawMaterialInventoryList(**dict(record)) for record in records]
             return [FactoryRawMaterialInventoryList(**dict(record)) for record in records]
         
 

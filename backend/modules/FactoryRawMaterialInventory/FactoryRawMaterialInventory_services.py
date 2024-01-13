@@ -87,6 +87,21 @@ class FactoryRawMaterialInventoryService:
             return ServiceResult(inventory)
         except Exception  as e:
             return ServiceResult(e)
+        
+    async def update_min_quantity_by_factory_and_material(self,current_user: UserInDB,factory_identifier: str, raw_material_code: str,update_min_quantity:float) -> ServiceResult:
+        try:
+
+            exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
+            if not exist_factory_and_raw_material.success:
+                return exist_factory_and_raw_material
+            
+            raw_material_id=uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
+            factory_id=uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
+
+            inventory = await FactoryRawMaterialInventoryRepository(self.db).update_min_quantity_by_factory_and_material(current_user,raw_material_id,factory_id,update_min_quantity)
+            return ServiceResult(inventory)
+        except Exception  as e:
+            return ServiceResult(e)
 
     async def delete_inventory_by_factory_and_material(self, factory_identifier: str, raw_material_code: str) -> ServiceResult:
         try:

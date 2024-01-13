@@ -68,7 +68,7 @@ async def get_all_inventory(
         return handle_result(result)
 
 @router.put("/increase-quantity",name="Fact-Mat-Inv:increase-quantity-inventory-by-factory-and-material", response_model=FactoryRawMaterialInventoryInDB,status_code=status.HTTP_200_OK)
-async def update_quantity(
+async def increase_quantity(
     factory_identifier: str = Query(..., title="The identifier of the factory"),
     raw_material_code: str = Query(..., title="The code of the raw material"),
     increase_quantity: float= Query(..., title="The amount to increase"), 
@@ -82,7 +82,7 @@ async def update_quantity(
             return handle_result(result)
          
 @router.put("/decrease-quantity",name="Fact-Mat-Inv:decrease-quantity-inventory-by-factory-and-material", response_model=FactoryRawMaterialInventoryInDB,status_code=status.HTTP_200_OK)
-async def update_quantity(
+async def decrease_quantity(
     factory_identifier: str = Query(..., title="The identifier of the factory"),
     raw_material_code: str = Query(..., title="The code of the raw material"),
     decrease_quantity: float= Query(..., title="The amount to decrease"), 
@@ -93,6 +93,20 @@ async def update_quantity(
             return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
          else :
             result = await FactoryRawMaterialInventoryService(db).decrease_quantity_by_factory_and_material(current_user,factory_identifier, raw_material_code,decrease_quantity)
+            return handle_result(result)
+         
+@router.put("/update-min-quantity",name="Fact-Mat-Inv:update-min-quantity-inventory-by-factory-and-material", response_model=FactoryRawMaterialInventoryInDB,status_code=status.HTTP_200_OK)
+async def update_min_quantity(
+    factory_identifier: str = Query(..., title="The identifier of the factory"),
+    raw_material_code: str = Query(..., title="The code of the raw material"),
+    new_min_quantity: float= Query(..., title="The amount to decrease"), 
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+         if not is_authorized(current_user, "Fact-Mat-Inv:update-min-quantity-inventory-by-factory-and-material"):
+            return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+         else :
+            result = await FactoryRawMaterialInventoryService(db).update_min_quantity_by_factory_and_material(current_user,factory_identifier, raw_material_code,new_min_quantity)
             return handle_result(result)
 
 @router.delete("/delete-inventory",name="Fact-Mat-Inv:delete-Inventory-by-factory-and-material", response_model=dict,status_code=status.HTTP_200_OK)
