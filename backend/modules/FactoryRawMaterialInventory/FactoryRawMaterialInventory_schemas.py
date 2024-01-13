@@ -20,3 +20,11 @@ class FactoryRawMaterialInventoryInDB(BaseSchema,DateTimeModelMixin,IDModelMixin
     created_by: UUID | str |  None
     updated_by: UUID | str |  None
 
+class FactoryRawMaterialInventoryList(BaseSchema,DateTimeModelMixin,IDModelMixin):
+    factory_identifier: str  
+    raw_material_code: str     
+    min_quantity: float
+    quantity: float
+    created_by: UUID | str |  None
+    updated_by: UUID | str |  None
+
