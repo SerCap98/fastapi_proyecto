@@ -11,9 +11,6 @@ from modules.Factory.Factory_schemas import Factory,FactoryInDB
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
-import logging
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 
 class FactoryRepository(BaseRepository):

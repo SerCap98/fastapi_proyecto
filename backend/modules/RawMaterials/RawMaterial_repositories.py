@@ -11,9 +11,6 @@ from modules.RawMaterials.RawMaterial_schemas import RawMaterial,RawMaterialInDB
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
-import logging
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.DEBUG)
 
 
 class RawMaterialRepository(BaseRepository):
@@ -73,7 +70,7 @@ class RawMaterialRepository(BaseRepository):
         except Exception as e:
             raise RawMaterialExceptions.RawMaterialInvalidUpdateParamsException(e=e)
 
-    async def delete_raw_material_by_code(self, code: str):
+    async def delete_raw_material_by_code(self, code: str) -> bool:
         from modules.RawMaterials.RawMaterial_sqlstaments import DELETE_RAW_MATERIAL_BY_CODE
         try:
             await self.db.execute(query=DELETE_RAW_MATERIAL_BY_CODE, values={"code": code.upper()})
