@@ -24,7 +24,7 @@ class FormulaRepository(BaseRepository):
     def _schema_out(self) -> Type[FormulaInDB]:
         return FormulaInDB
 
-    async def create_formula(self, Form: Formula,current_user: UserInDB,raw_material:UUID ,product:UUID) -> FormulaInDB:
+    async def create_Formula(self, Form: Formula,current_user: UserInDB,raw_material:UUID ,product:UUID) -> FormulaInDB:
 
         from modules.Formula.Formula_sqlstaments import CREATE_FORMULA
 
@@ -33,9 +33,9 @@ class FormulaRepository(BaseRepository):
 
         values = {
             "id": formula_id ,
+            "quantity":Form.quantity if Form.quantity else None,
             "raw_material": raw_material ,
             "product": product ,
-            "quantity":Form.quantity if Form.quantity else None,
             "created_by": current_user.id,
             "created_at": current_time
             }
@@ -52,8 +52,8 @@ class FormulaRepository(BaseRepository):
     async def get_formula_by_Product_and_RawMaterial(self,raw_material:UUID ,product:UUID) -> FormulaInDB:
         from modules.Formula.Formula_sqlstaments import GET_PRODUCT_RAW_MATERIAL_FORMULA
         values = {
-            "product": product ,
-            "raw_material": raw_material
+            "raw_material": raw_material,
+            "product": product
             }
 
         record = await self.db.fetch_one(query=GET_PRODUCT_RAW_MATERIAL_FORMULA, values=values)

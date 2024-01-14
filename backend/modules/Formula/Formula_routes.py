@@ -18,29 +18,29 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.post("/", response_model=FormulaInDB, name="Form:create-formula", status_code=status.HTTP_201_CREATED)
-async def create_formula(
+@router.post("/", response_model=FormulaInDB, name="Form:create-Formula", status_code=status.HTTP_201_CREATED)
+async def create_Formula(
     Form: Formula = Body(..., embed=True),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 )-> ServiceResult:
-    if not is_authorized(current_user, "Form:create-formula"):
+    if not is_authorized(current_user, "Form:create-Formula"):
         raise AuthExceptions.AuthUnauthorizedException()
 
-    result = await FormulaService(db).create_formula(Form,current_user)
+    result = await FormulaService(db).create_Formula(Form,current_user)
     return handle_result(result)
 
 @router.get("/get-formula",name="Formula:get-formula-by-product-and-material", response_model=FormulaInDB,status_code=status.HTTP_200_OK)
 async def get_formula_by_product_and_material(
-    product_name: str = Query(..., title="The name of the product"),
     raw_material_code: str = Query(..., title="The code of the raw material"),
+    product_name: str = Query(..., title="The name of the product"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 )-> ServiceResult:
     if not is_authorized(current_user, "Formula:get-formula-by-product-and-material"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
-        result = await FormulaService(db).get_formula_by_product_and_material(product_name, raw_material_code)
+        result = await FormulaService(db).get_formula_by_product_and_material(raw_material_code, product_name)
         return handle_result(result)
 
 @router.get("/get-formula/all/", name="Formula:get-all-formula",response_model=Dict,status_code=status.HTTP_200_OK)

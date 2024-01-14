@@ -20,28 +20,31 @@ class FormulaService:
     def __init__(self, db: Database):
         self.db = db
 
-    async def create_formula(self, Form: Formula,current_user: UserInDB) -> ServiceResult:
+    async def create_Formula(self, Formula: Formula,current_user: UserInDB) -> ServiceResult:
         Formula_repo = FormulaRepository(self.db)
 
         try:
 
-            exist_product_and_raw_material=await self.exist_Product_RawMaterial(Form.product_name,Form.raw_material_code)
-            if not exist_product_and_raw_material.success:
-                return exist_product_and_raw_material
+            exist_raw_material_and_product=await self.exist_RawMaterial_Product(Formula.raw_material_code, Formula.product_name)
+            if not exist_raw_material_and_product.success:
+                return exist_raw_material_and_product
 
-            raw_material_id=uuid.UUID(str(exist_product_and_raw_material.value["raw_material_id"]))
-            product_id=uuid.UUID(str(exist_product_and_raw_material.value["product_id"]))
+            raw_material_id=uuid.UUID(str(exist_raw_material_and_product.value["raw_material_id"]))
+            product_id=uuid.UUID(str(exist_raw_material_and_product.value["product_id"]))
 
-            new_Form = await Formula_repo.create_formula(Form,current_user,raw_material_id,product_id)
-            return ServiceResult(new_Form)
+            new_Formula = await Formula_repo.create_Formula(Formula,
+                                                                current_user,
+                                                                raw_material_id,
+                                                                product_id)
+            return ServiceResult(new_Formula)
 
         except Exception as e:
             return ServiceResult(e)
 
-    async def get_formula_by_product_and_material(self, product_name: str, raw_material_code: str) -> ServiceResult:
+    async def get_formula_by_product_and_material(self, raw_material_code: str, product_name: str ) -> ServiceResult:
         try:
 
-            exist_product_and_raw_material=await self.exist_Product_RawMaterial(product_name,raw_material_code)
+            exist_product_and_raw_material=await self.exist_RawMaterial_Product(raw_material_code, product_name)
             if not exist_product_and_raw_material.success:
                 return exist_product_and_raw_material
 
@@ -55,19 +58,16 @@ class FormulaService:
             return ServiceResult(e)
 
 
-
-
-
-    async def exist_Product_RawMaterial(self, product_name: str, raw_material_code: str) -> ServiceResult:
+    async def exist_RawMaterial_Product(self, raw_material_code: str, product_name: str) -> ServiceResult:
         Raw_Material_services=RawMaterialService(self.db)
         Product_services=ProductService(self.db)
 
         try:
-            exist_raw_material=await Raw_Material_services.get_raw_material_by_code(raw_material_code.upper())
-            if not exist_raw_material.success:return exist_raw_material
-
             exist_product=await Product_services.get_product_by_name(product_name.upper())
             if not exist_product.success:return exist_product
+
+            exist_raw_material=await Raw_Material_services.get_raw_material_by_code(raw_material_code.upper())
+            if not exist_raw_material.success:return exist_raw_material
 
             result = {
                     "raw_material_id": exist_raw_material.value.id,
@@ -93,46 +93,4 @@ class FormulaService:
                 return ServiceResult(response)
             except Exception as e:
 
-                return ServiceResult(e)
-
-
-
-    async def get_formula_by_mat_code(self,
-            code: str,
-            page_num: int = 1,
-            page_size: int = 10,
-            order: str = None,
-            direction: str = None,
-        ) -> ServiceResult:
-            try:
-                manufactured_product = await FormulaRepository(self.db).get_inventory_by_mat_code(code, order, direction)
-                manufactured_product_list = [FormulaList(**item.dict()) for item in manufactured_product]
-                response = short_pagination(
-                    page_num=page_num,
-                    page_size=page_size,
-                    data_list=manufactured_product_list,
-                    route=f"{API_PREFIX}/manufactured-products/by-identifier/{code}",
-                )
-                return ServiceResult(response)
-            except Exception as e:
-                return ServiceResult(e)
-            
-    async def get_inventory_by_fact_identifier(self,
-            identifier: str,
-            page_num: int = 1,
-            page_size: int = 10,
-            order: str = None,
-            direction: str = None,
-        ) -> ServiceResult:
-            try:
-                manufactured_product = await FormulaRepository(self.db).get_inventory_by_fact_identifier(identifier, order, direction)
-                manufactured_product_list = [FormulaList(**item.dict()) for item in manufactured_product]
-                response = short_pagination(
-                    page_num=page_num,
-                    page_size=page_size,
-                    data_list=manufactured_product_list,
-                    route=f"{API_PREFIX}/manufactured-products/by-identifier/{identifier}",
-                )
-                return ServiceResult(response)
-            except Exception as e:
                 return ServiceResult(e)

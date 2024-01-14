@@ -6,22 +6,22 @@ from shared.utils.schemas_base import BaseSchema, DateTimeModelMixin, IDModelMix
 
 # formulas
 class Formula(BaseSchema):
+    quantity: Optional[float] = None
     raw_material_code: str
     product_name: str
-    quantity: Optional[float] = None
 
 
 class FormulaInDB(BaseSchema,DateTimeModelMixin,IDModelMixin):
+    quantity: float
     id_raw_material: UUID
     id_product: UUID
-    quantity: float
     created_by: UUID | str |  None
     updated_by: UUID | str |  None
 
 class FormulaList(BaseSchema,DateTimeModelMixin,IDModelMixin):
+    quantity: float
     raw_material_code: str
     product_name: str
-    quantity: float
     created_by: UUID | str |  None
     created_by_fullname:str |  None
     updated_by: UUID | str |  None
