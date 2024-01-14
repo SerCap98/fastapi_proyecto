@@ -82,38 +82,6 @@ class ManufacturedProductService:
             return ServiceResult(e)
 
 
-    async def update_manufactured_product_by_id(self,current_user: UserInDB, id: UUID,update_product_name:str) -> ServiceResult:
-        try:
-
-            exist_manufactured_product=await self.get_manufactured_product_by_id(id)
-            if not exist_manufactured_product.success:
-                return exist_manufactured_product
-
-            manufactured_product_id=uuid.UUID(exist_manufactured_product.value["manufactured_product_id"])
-
-            manufactured_product = await ManufacturedProductRepository(self.db).update_min_quantity_by_factory_and_material(current_user,manufactured_product_id,update_product_name)
-            return ServiceResult(manufactured_product)
-        except Exception  as e:
-            return ServiceResult(e)
-
-
-    async def delete_manufactured_product_by_id(self, id: UUID) -> ServiceResult:
-        try:
-
-            exist_manufactured_product=await self.get_manufactured_product_by_id(id)
-            if not exist_manufactured_product.success:
-                return exist_manufactured_product
-
-            manufactured_product_id=uuid.UUID(exist_manufactured_product.value["manufactured_product_id"])
-
-            await ManufacturedProductRepository(self.db).delete_manufactured_product_by_id(manufactured_product_id)
-            return ServiceResult({"message": "Record deleted successfully"})
-        except Exception  as e:
-
-            return ServiceResult(e)
-            
-
-
     async def get_manufactured_product_by_name(self,
             name: str,
             page_num: int = 1,
@@ -133,7 +101,8 @@ class ManufacturedProductService:
                 return ServiceResult(response)
             except Exception as e:
                 return ServiceResult(e)
-            
+
+
     async def get_manufactured_product_by_lot_number(self,
             lot_number: str,
             page_num: int = 1,
@@ -153,3 +122,33 @@ class ManufacturedProductService:
                 return ServiceResult(response)
             except Exception as e:
                 return ServiceResult(e)
+
+
+    async def update_manufactured_product_by_id(self,current_user: UserInDB, id: UUID,update_product_name:str) -> ServiceResult:
+        try:
+
+            exist_manufactured_product=await self.get_manufactured_product_by_id(id)
+            if not exist_manufactured_product.success:
+                return exist_manufactured_product
+
+            manufactured_product_id=uuid.UUID(exist_manufactured_product.value["manufactured_product_id"])
+
+            manufactured_product = await ManufacturedProductRepository(self.db).update_manufactured_product_by_id(current_user,manufactured_product_id,update_product_name)
+            return ServiceResult(manufactured_product)
+        except Exception  as e:
+            return ServiceResult(e)
+
+
+    async def delete_manufactured_product_by_id(self, id: UUID) -> ServiceResult:
+        try:
+
+            exist_manufactured_product=await self.get_manufactured_product_by_id(id)
+            if not exist_manufactured_product.success:
+                return exist_manufactured_product
+
+            manufactured_product_id = await ManufacturedProductRepository(self.db).delete_manufactured_product_by_id(id=id)
+
+            return ServiceResult(manufactured_product_id)
+        except Exception  as e:
+
+            return ServiceResult(e)

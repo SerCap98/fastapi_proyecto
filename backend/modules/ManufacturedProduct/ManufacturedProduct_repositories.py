@@ -33,13 +33,8 @@ class ManufacturedProductRepository(BaseRepository):
 
         values = {
             "id": ManufacturedProduct_id ,
-<<<<<<< HEAD
             "id_product": id_product ,
-            "lot_number": "123-456-789",
-=======
-            "id_product": product ,
             "lot_number": lot_number,
->>>>>>> a74c178f87e1b1b4acc4770392dd38bebf6d5b56
             "quantity":40,
             "created_by": current_user.id,
             "created_at": current_time
@@ -94,32 +89,6 @@ class ManufacturedProductRepository(BaseRepository):
             raise ManufacturedProductExceptions.ManufacturedProductNotFoundException()
         return self._schema_out(**dict(record))
 
-    async def update_manufactured_product_by_id(self, current_user: UserInDB, id: UUID, new_product_name:str) -> ManufacturedProductInDB:
-        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import UPDATE_MANUFACTURED_PRODUCT_BY_ID
-        current_time = datetime.now()
-        try:
-            values = {
-                "id":id,
-                "product_name":new_product_name,
-                "updated_by": current_user.id,
-                "updated_at": current_time
-                }
-
-            record = await self.db.fetch_one(query=UPDATE_MANUFACTURED_PRODUCT_BY_ID , values=values)
-        except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductException(e)
-        return self._schema_out(**dict(record))
-
-    async def delete_manufactured_product_by_id(self, id:UUID) -> str | dict:
-        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import DELETE_MANUFACTURED_PRODUCT_BY_ID
-        try:
-            values = {"id": id }
-
-            record = await self.db.fetch_one(query=DELETE_MANUFACTURED_PRODUCT_BY_ID, values=values)
-        except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductDeleteException(e)
-        return self._schema_out(**dict(record))
-        
     async def get_manufactured_product_by_name(self, name: str, order: str | None, direction: str | None) -> List:
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import LIST_MANUFACTURED_PRODUCT_BY_NAME, MANUFACTURED_PRODUCT_COMPLEMENTS
 
@@ -139,7 +108,7 @@ class ManufacturedProductRepository(BaseRepository):
 
         except Exception as e:
             raise ManufacturedProductExceptions.ManufacturedProductException()
-        
+
     async def get_manufactured_product_by_lot_number(self, lot_number: str, order: str | None, direction: str | None) -> List:
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER, MANUFACTURED_PRODUCT_COMPLEMENTS
 
@@ -160,3 +129,29 @@ class ManufacturedProductRepository(BaseRepository):
         except Exception as e:
             raise ManufacturedProductExceptions.ManufacturedProductException()
 
+    async def update_manufactured_product_by_id(self, current_user: UserInDB, id: UUID, new_product_name:str) -> ManufacturedProductInDB:
+        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import UPDATE_MANUFACTURED_PRODUCT_BY_ID
+        current_time = datetime.now()
+        try:
+            values = {
+                "id":id,
+                "product_name":new_product_name,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=UPDATE_MANUFACTURED_PRODUCT_BY_ID , values=values)
+        except Exception as e:
+            raise ManufacturedProductExceptions.ManufacturedProductException(e)
+        return self._schema_out(**dict(record))
+
+    async def delete_manufactured_product_by_id(self,id: UUID,) -> str | dict:
+        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import DELETE_MANUFACTURED_PRODUCT_BY_ID
+
+        manufactured_product = await self.get_manufactured_product_by_id(id=id)
+        if not manufactured_product:
+            return []
+
+        deleted_id = await self.db.execute(query=DELETE_MANUFACTURED_PRODUCT_BY_ID, values={"id": id})
+
+        return deleted_id

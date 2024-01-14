@@ -30,7 +30,6 @@ async def create_manufactured_product(
     result = await ManufacturedProductService(db).create_manufactured_product(ManufacturedProduct,current_user)
     return handle_result(result)
 
-#GET ALL
 @router.get("/get-manufactured_product/all/", name="ManufacturedProduct:get-all-manufactured-product",response_model=Dict,status_code=status.HTTP_200_OK)
 async def get_all_manufactured_product(
     search: str | None = None,
@@ -52,7 +51,6 @@ async def get_all_manufactured_product(
         direction=direction,)
         return handle_result(result)
 
-#GET BY ID
 @router.get("/{id}", response_model=ManufacturedProductInDB, name="ManufacturedProduct:get-manufactured-product-by-id")
 async def get_manufactured_product_by_id(
     id: UUID = Path(..., title="The id of the manufactured product"),
@@ -63,31 +61,6 @@ async def get_manufactured_product_by_id(
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :
         result = await ManufacturedProductService(db).get_manufactured_product_by_id(id)
-        return handle_result(result)
-
-@router.put("/update-manufactured-product",name="ManufacturedProduct:update-manufactured-product-by-id", response_model=ManufacturedProductInDB,status_code=status.HTTP_200_OK)
-async def update_manufactured_product_by_id(
-    id: UUID = Query(..., title="The id of the manufactured product"),
-    new_product_name: str= Query(..., title="The name of the product"),
-    db: Database = Depends(get_database),
-    current_user: UserInDB = Depends(get_current_active_user)
-) -> ServiceResult:
-         if not is_authorized(current_user, "ManufacturedProduct:update-manufactured-product-by-id"):
-            return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
-         else :
-            result = await ManufacturedProductService(db).update_manufactured_product_by_id(current_user,id, new_product_name)
-            return handle_result(result)
-
-@router.delete("/delete-manufactured-product",name="ManufacturedProduct:delete-manufactured-product-by-id", response_model=dict,status_code=status.HTTP_200_OK)
-async def delete_manufactured_product_by_id(
-    id: UUID = Query(..., title="The id of the manufactured product"),
-    db: Database = Depends(get_database),
-    current_user: UserInDB = Depends(get_current_active_user)
-)-> ServiceResult:
-    if not is_authorized(current_user, "ManufacturedProduct:delete-manufactured-product-by-id"):
-        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
-    else :
-        result = await ManufacturedProductService(db).delete_manufactured_product_by_id(id)
         return handle_result(result)
 
 @router.get("/get-manufactured_product/by-name/{name}", name="ManufacturedProduct:get-manufactured-product-by-name", response_model=Dict, status_code=status.HTTP_200_OK)
@@ -110,7 +83,7 @@ async def get_manufactured_product_by_name(
             order=order,
             direction=direction)
         return handle_result(result)
-    
+
 @router.get("/get-manufactured_product/by_lot_number/{lot_number}", name="ManufacturedProduct:get-manufactured-product-by-lot_number", response_model=Dict, status_code=status.HTTP_200_OK)
 async def get_manufactured_product_by_lot_number(
     lot_number: str,
@@ -131,3 +104,28 @@ async def get_manufactured_product_by_lot_number(
             order=order,
             direction=direction)
         return handle_result(result)
+
+@router.put("/update-manufactured-product",name="ManufacturedProduct:update-manufactured-product-by-id", response_model=ManufacturedProductInDB,status_code=status.HTTP_200_OK)
+async def update_manufactured_product_by_id(
+    id: UUID = Query(..., title="The id of the manufactured product"),
+    new_product_name: str= Query(..., title="The name of the product"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+         if not is_authorized(current_user, "ManufacturedProduct:update-manufactured-product-by-id"):
+            return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+         else :
+            result = await ManufacturedProductService(db).update_manufactured_product_by_id(current_user,id, new_product_name)
+            return handle_result(result)
+
+@router.delete("/{id}", response_model=UUID, name="ManufacturedProduct:delete-manufactured-product-by-id", status_code=status.HTTP_200_OK)
+async def delete_manufactured_product_by_id(
+    id: UUID = Path(..., title="The id of the manufactured product"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user),
+) -> ServiceResult:
+    if not is_authorized(current_user, "ManufacturedProduct:delete-manufactured-product-by-id"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+
+    result = await ManufacturedProductService(db).delete_manufactured_product_by_id(id=id)
+    return handle_result(result)
