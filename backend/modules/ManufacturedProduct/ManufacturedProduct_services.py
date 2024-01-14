@@ -73,3 +73,45 @@ class ManufacturedProductService:
             except Exception as e:
 
                 return ServiceResult(e)
+            
+
+
+    async def get_manufactured_product_by_name(self,
+            name: str,
+            page_num: int = 1,
+            page_size: int = 10,
+            order: str = None,
+            direction: str = None,
+        ) -> ServiceResult:
+            try:
+                manufactured_product = await ManufacturedProductRepository(self.db).get_manufactured_product_by_name(name, order, direction)
+                manufactured_product_list = [ManufacturedProductList(**item.dict()) for item in manufactured_product]
+                response = short_pagination(
+                    page_num=page_num,
+                    page_size=page_size,
+                    data_list=manufactured_product_list,
+                    route=f"{API_PREFIX}/manufactured-products/by-identifier/{name}",
+                )
+                return ServiceResult(response)
+            except Exception as e:
+                return ServiceResult(e)
+            
+    async def get_manufactured_product_by_lot_number(self,
+            lot_number: str,
+            page_num: int = 1,
+            page_size: int = 10,
+            order: str = None,
+            direction: str = None,
+        ) -> ServiceResult:
+            try:
+                manufactured_product = await ManufacturedProductRepository(self.db).get_manufactured_product_by_lot_number(lot_number, order, direction)
+                manufactured_product_list = [ManufacturedProductList(**item.dict()) for item in manufactured_product]
+                response = short_pagination(
+                    page_num=page_num,
+                    page_size=page_size,
+                    data_list=manufactured_product_list,
+                    route=f"{API_PREFIX}/manufactured-products/by-identifier/{lot_number}",
+                )
+                return ServiceResult(response)
+            except Exception as e:
+                return ServiceResult(e)
