@@ -5,6 +5,12 @@ CREATE_MANUFACTURED_PRODUCT = """
     RETURNING id, id_product, lot_number, quantity, created_by, created_at;
 """
 
+GET_MANUFACTURED_PRODUCT_BY_ID = """
+    SELECT mp.id, mp.id_product, mp.lot_number, mp.quantity, mp.created_by, mp.created_at
+    FROM manufactured_product AS mp
+    WHERE mp.id = :id;
+"""
+
 LIST_MANUFACTURED_PRODUCT = """
     SELECT mp.id, mp.lot_number, mp.quantity, mp.created_by, mp.created_at, mp.updated_by, mp.updated_at,
         us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname,
@@ -35,6 +41,20 @@ LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
     WHERE mp.lot_number = :lot_number  
 """
 
+UPDATE_MANUFACTURED_PRODUCT_BY_ID = """
+    UPDATE manufactured_product
+    SET product_name = :product_name,
+        updated_at = :updated_at,
+        updated_by = :updated_by
+    WHERE id = :id
+    RETURNING id, id_product, lot_number, quantity, created_by, created_at;
+"""
+
+DELETE_MANUFACTURED_PRODUCT_BY_ID = """
+    DELETE from manufactured_product
+    WHERE id = :id
+    RETURNING id
+"""
 
 def MANUFACTURED_PRODUCT_COMPLEMENTS(order: str | None, direction: str | None):
     sql_sentence = ""

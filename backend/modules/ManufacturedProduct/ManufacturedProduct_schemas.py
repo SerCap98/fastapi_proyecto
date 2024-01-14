@@ -8,8 +8,6 @@ from shared.utils.schemas_base import BaseSchema, DateTimeModelMixin, IDModelMix
 class ManufacturedProduct(BaseSchema):
     product_name: Optional[str] = None
 
-
-
 class ManufacturedProductInDB(BaseSchema,DateTimeModelMixin,IDModelMixin):
     id_product: UUID
     lot_number: str
