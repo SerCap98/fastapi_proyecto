@@ -6,13 +6,12 @@ from shared.utils.schemas_base import BaseSchema, DateTimeModelMixin, IDModelMix
 
 # Productos Manufacturados
 class ManufacturedProduct(BaseSchema):
-    product_name: str
-    lot_number: Optional[int] = None
-    quantity: Optional[int] = None
+    product_name: Optional[str] = None
+
 
 
 class ManufacturedProductInDB(ManufacturedProduct,DateTimeModelMixin,IDModelMixin):
-    id_product: UUID4
+    id_product: UUID
     lot_number: str
     quantity: int
     created_by: UUID | str |  None

@@ -12,7 +12,7 @@ import uuid
 from modules.RawMaterials.RawMaterial_services import RawMaterialService
 from modules.Factory.Factory_services import FactoryService
 from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_exceptions import FactoryRawMaterialInventoryExceptions
-from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_schemas import FactoryRawMaterialInventory,FactoryRawMaterialInventoryInDB
+from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_schemas import FactoryRawMaterialInventory,FactoryRawMaterialInventoryInDB,FactoryRawMaterialInventoryList
 from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_repositories import FactoryRawMaterialInventoryRepository
 
 class FactoryRawMaterialInventoryService:
@@ -150,7 +150,7 @@ class FactoryRawMaterialInventoryService:
             try:
                 
                 inventory = await FactoryRawMaterialInventoryRepository(self.db).get_all_inventory(search,order,direction)
-                inventory_list = [FactoryRawMaterialInventory(**item.dict()) for item in inventory]
+                inventory_list = [FactoryRawMaterialInventoryList(**item.dict()) for item in inventory]
                 response = short_pagination(
                     page_num=page_num,
                     page_size=page_size,

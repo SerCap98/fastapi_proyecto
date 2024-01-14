@@ -1,13 +1,13 @@
 
 CREATE_MANUFACTURED_PRODUCT = """
     INSERT INTO manufactured_product (id, id_product, lot_number, quantity, created_by, created_at)
-    VALUES (:id, :id_product, :lot_number, :quantity, :created_by, :created_at)
+    VALUES (:id, :product, :lot_number, :quantity, :created_by, :created_at)
     RETURNING id, id_product, lot_number, quantity, created_by, created_at;
 """
 
 DELETE_MANUFACTURED_PRODUCT_BY_ID_PRODUCT = """
     DELETE FROM manufactured_product
-    WHERE id_product = :id_product;
+    WHERE id_product = :product;
 """
 DELETE_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
     DELETE FROM manufactured_product
@@ -17,7 +17,7 @@ DELETE_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
 GET_MANUFACTURED_PRODUCT_BY_ID_PRODUCT = """
     SELECT id, id_product, lot_number, quantity, created_by, created_at, updated_by, updated_at
     FROM manufactured_product
-    WHERE id_product = :id_product;
+    WHERE id_product = :product;
 """
 GET_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
     SELECT id, id_product, lot_number, quantity, created_by, created_at, updated_by, updated_at
@@ -30,7 +30,7 @@ UPDATE_QUANTITY_BY_ID_PRODUCT = """
     SET quantity = :quantity,
         updated_at = :updated_at,
         updated_by = :updated_by
-    WHERE id_product = :factory
+    WHERE id_product = :product
     RETURNING id, id_product, lot_number, quantity, created_by, created_at, updated_by, updated_at;
 """
 UPDATE_QUANTITY_BY_LOT_NUMBER = """
@@ -49,8 +49,9 @@ LIST_MANUFACTURED_PRODUCT = """
     FROM manufactured_product AS mp
     LEFT JOIN users AS us1 ON us1.id = mp.created_by
     LEFT JOIN users AS us2 ON us2.id = mp.updated_by
-    LEFT JOIN id_product AS prod ON prod.id = mp.id_product
+    LEFT JOIN product AS prod ON prod.id = mp.id_product
 """
+
 
 def MANUFACTURED_PRODUCT_COMPLEMENTS(order: str | None, direction: str | None):
     sql_sentence = ""
