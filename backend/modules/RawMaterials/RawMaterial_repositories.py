@@ -7,7 +7,7 @@ from shared.utils.service_result import ServiceResult
 from modules.users.users.user_schemas import UserInDB
 
 from modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
-from modules.RawMaterials.RawMaterial_schemas import RawMaterial,RawMaterialInDB
+from modules.RawMaterials.RawMaterial_schemas import RawMaterial,RawMaterialInDB, RawMaterialList
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
@@ -27,7 +27,7 @@ class RawMaterialRepository(BaseRepository):
        
         raw_material_id = str(uuid.uuid4())
         current_time = datetime.now()
-        print(raw_material_id)
+ 
         
         values = {
             "id": raw_material_id ,
@@ -36,9 +36,9 @@ class RawMaterialRepository(BaseRepository):
             "created_by": current_user.id,
             "created_at": current_time
             }
-        print(values)
+  
         try:
-            print(values)
+     
             record = await self.db.fetch_one(query=CREATE_RAW_MATERIAL, values=values)
         except Exception as e:
             raise RawMaterialExceptions.RawMaterialInvalidCreateParamsException(e=e)
@@ -102,7 +102,7 @@ class RawMaterialRepository(BaseRepository):
             if len(records) == 0 or not records:
                 return []
 
-            return [self._schema_out(**dict(record)) for record in records]
+            return [RawMaterialList(**dict(record)) for record in records]
         
 
         except Exception as e:

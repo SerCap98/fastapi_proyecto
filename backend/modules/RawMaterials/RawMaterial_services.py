@@ -4,7 +4,7 @@ from shared.utils.short_pagination import short_pagination
 from modules.users.users.user_schemas import UserInDB
 from modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
 from modules.RawMaterials.RawMaterial_repositories import RawMaterialRepository
-from modules.RawMaterials.RawMaterial_schemas import RawMaterial
+from modules.RawMaterials.RawMaterial_schemas import RawMaterial, RawMaterialInDB, RawMaterialList
 from shared.utils.service_result import ServiceResult
 from databases import Database
 from uuid import UUID
@@ -64,7 +64,7 @@ class RawMaterialService:
         try:
      
             raw_materials = await RawMaterialRepository(self.db).get_all_raw_material(search,order,direction)
-            raw_materials_list = [RawMaterial(**item.dict()) for item in raw_materials]
+            raw_materials_list = [RawMaterialList(**item.dict()) for item in raw_materials]
             response = short_pagination(
                 page_num=page_num,
                 page_size=page_size,

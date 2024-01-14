@@ -4,7 +4,7 @@ from shared.utils.short_pagination import short_pagination
 from modules.users.users.user_schemas import UserInDB
 from modules.Product.Product_exceptions import ProductExceptions
 from modules.Product.Product_repositories import ProductRepository
-from modules.Product.Product_schemas import Product
+from modules.Product.Product_schemas import Product, ProductList
 from shared.utils.service_result import ServiceResult
 from databases import Database
 from uuid import UUID
@@ -64,7 +64,7 @@ class ProductService:
         try:
      
             product = await ProductRepository(self.db).get_all_product(search,order,direction)
-            product_list = [Product(**item.dict()) for item in product]
+            product_list = [ProductList(**item.dict()) for item in product]
             response = short_pagination(
                 page_num=page_num,
                 page_size=page_size,

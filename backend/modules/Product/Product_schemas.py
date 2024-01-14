@@ -15,3 +15,11 @@ class ProductInDB(Product,DateTimeModelMixin,IDModelMixin):
     cost_per_bag: float
     created_by: UUID | str |  None
     updated_by: UUID | str |  None
+
+class ProductList(Product,DateTimeModelMixin,IDModelMixin):
+    name: str
+    cost_per_bag: float
+    created_by: UUID | str |  None
+    created_by_fullname: str |  None
+    updated_by: UUID | str |  None
+    updated_by_fullname: str |  None
