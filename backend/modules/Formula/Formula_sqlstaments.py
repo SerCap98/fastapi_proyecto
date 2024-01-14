@@ -7,7 +7,7 @@ DELETE_PRODUCT_RAW_MATERIAL_FORMULA = """
     DELETE FROM formula
     WHERE id_raw_material = :raw_material AND id_product = :product;
 """
-GET_PRODUCT_RAW_MATERIAL_FORMULA = """
+GET_RAW_MATERIAL_PRODUCT_FORMULA = """
     SELECT id, quantity, id_raw_material, id_product, created_by, created_at, updated_by, updated_at
     FROM formula
     WHERE id_raw_material = :raw_material AND id_product = :product;

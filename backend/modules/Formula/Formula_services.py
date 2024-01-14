@@ -41,17 +41,17 @@ class FormulaService:
         except Exception as e:
             return ServiceResult(e)
 
-    async def get_formula_by_product_and_material(self, raw_material_code: str, product_name: str ) -> ServiceResult:
+    async def get_formula_by_RawMaterial_and_Product(self, raw_material_code: str, product_name: str) -> ServiceResult:
         try:
 
-            exist_product_and_raw_material=await self.exist_RawMaterial_Product(raw_material_code, product_name)
-            if not exist_product_and_raw_material.success:
-                return exist_product_and_raw_material
+            exist_raw_material_and_product=await self.exist_RawMaterial_Product(raw_material_code, product_name)
+            if not exist_raw_material_and_product.success:
+                return exist_raw_material_and_product
 
-            raw_material_id=uuid.UUID(str(exist_product_and_raw_material.value["raw_material_id"]))
-            product_id=uuid.UUID(str(exist_product_and_raw_material.value["product_id"]))
+            product_id=uuid.UUID(str(exist_raw_material_and_product.value["product_id"]))
+            raw_material_id=uuid.UUID(str(exist_raw_material_and_product.value["raw_material_id"]))
 
-            formula = await FormulaRepository(self.db).get_formula_by_product_and_material(raw_material_id,product_id)
+            formula = await FormulaRepository(self.db).get_formula_by_RawMaterial_and_Product(product_id, raw_material_id)
             return ServiceResult(formula)
         except Exception  as e:
 

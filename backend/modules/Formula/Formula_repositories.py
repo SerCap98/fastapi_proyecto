@@ -49,14 +49,14 @@ class FormulaRepository(BaseRepository):
         result = record_to_dict(record)
         return self._schema_out(**result)
 
-    async def get_formula_by_Product_and_RawMaterial(self,raw_material:UUID ,product:UUID) -> FormulaInDB:
-        from modules.Formula.Formula_sqlstaments import GET_PRODUCT_RAW_MATERIAL_FORMULA
+    async def get_formula_by_RawMaterial_and_Product(self,product:UUID, raw_material:UUID) -> FormulaInDB:
+        from modules.Formula.Formula_sqlstaments import GET_RAW_MATERIAL_PRODUCT_FORMULA
         values = {
             "raw_material": raw_material,
-            "product": product
+            "product": product ,
             }
 
-        record = await self.db.fetch_one(query=GET_PRODUCT_RAW_MATERIAL_FORMULA, values=values)
+        record = await self.db.fetch_one(query=GET_RAW_MATERIAL_PRODUCT_FORMULA, values=values)
         if not record:
             raise FormulaExceptions.FormulaNotFoundException()
         return self._schema_out(**dict(record))
