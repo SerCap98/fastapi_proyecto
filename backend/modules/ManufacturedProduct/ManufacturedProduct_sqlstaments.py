@@ -51,13 +51,13 @@ def MANUFACTURED_PRODUCT_COMPLEMENTS(order: str | None, direction: str | None):
     sql_sentence = ""
     if not order and not direction:
         sql_sentence = " ORDER BY mp.quantity ASC;"
-    elif order == "quantity" and direction == "DESC":
-        sql_sentence = " ORDER BY mp.quantity DESC;"
-    elif order == "quantity" and (direction == "ASC" or direction == None):
-        sql_sentence = " ORDER BY mp.quantity ASC;"
+    elif order == "created_at" and direction == "DESC":
+        sql_sentence = " ORDER BY mp.created_at DESC;"
+    elif order == "created_at" and (direction == "ASC" or direction == None):
+        sql_sentence = " ORDER BY mp.created_at ASC;"
 
     return sql_sentence
 
 
 def MANUFACTURED_PRODUCT_SEARCH():
-    return """ WHERE (prod.name ILIKE :search ) """
+    return """ WHERE (prod.name ILIKE :search OR mp.lot_number ILIKE :search) """

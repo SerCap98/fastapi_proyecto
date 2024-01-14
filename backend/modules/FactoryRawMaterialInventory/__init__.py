@@ -4,7 +4,7 @@ from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_routes impo
 
 FactoryRawMaterialsInventory_router = APIRouter(
     prefix="/FactRawMatInv",
-    tags=["FactoryRawMaterialInventory"],
+    tags=["factory-material-inventory"],
     responses={404: {"description": "Not found"}},
 )
 

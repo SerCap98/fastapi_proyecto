@@ -26,3 +26,5 @@ class AlertInDB(BaseSchema, DateTimeModelMixin, IDModelMixin):
 class AlertList(AlertInDB):
     created_by_fullname: Optional[str] = None
     updated_by_fullname: Optional[str] = None
+    factory_identifier : str
+    raw_material_code :str

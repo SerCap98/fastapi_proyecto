@@ -99,3 +99,35 @@ class AlertRepository(BaseRepository):
         except Exception as e:
             raise AlertExceptions.AlertNotFoundException()
         return True
+
+
+    async def get_all_alert(self,
+            search: str | None,
+            order: str | None,
+            direction: str | None
+            ) -> List:
+            from modules.Alert.Alert_sqlstaments import LIST_ALERT,ALERT_COMPLEMENTS,ALERT_SEARCH
+            
+            order = order.lower() if order != None else None
+            direction = direction.upper() if order != None else None
+            values = {}
+            sql_sentence = ALERT_COMPLEMENTS(order, direction)
+            sql_search = ALERT_SEARCH()
+            if not search:
+                sql_sentence = LIST_ALERT + sql_sentence
+            else:
+                sql_sentence = LIST_ALERT + sql_search + sql_sentence
+                values["search"] = "%" + search + "%"
+            try:
+                
+                records = await self.db.fetch_all(query=sql_sentence,values=values)
+                if len(records) == 0 or not records:
+                    return []
+       
+                return [AlertList(**dict(record)) for record in records]
+            
+
+            except Exception as e:
+              print(e)
+              raise AlertExceptions.AlertListException(e)
+        

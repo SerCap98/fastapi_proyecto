@@ -45,6 +45,32 @@ async def get_alert(
         result = await AlertService(db).get_alert(id)
         return handle_result(result)
     
+@router.get("/all/", name="Alert:get-all-alert",response_model=Dict,status_code=status.HTTP_200_OK)
+async def get_all_alert(
+    search: str | None = None,
+    page_number: int = 1,
+    page_size: int = 10,
+    order: str = "",
+    direction: str = "",
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+)-> ServiceResult:
+
+    if not is_authorized(current_user, "Alert:get-all-alert"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else :
+
+        result = await AlertService(db).get_all_alert( 
+        search,
+        page_num=page_number,
+        page_size=page_size,
+        order=order,
+        direction=direction,)
+        return handle_result(result)   
+    
+
+
+    
 @router.delete("/{id}", response_model=dict, name="Alert:delete-alert",status_code=status.HTTP_200_OK)
 async def delete_factory_by_identifier(
     id: UUID = Path(..., title="The id of the alert to delete"),

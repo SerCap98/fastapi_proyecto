@@ -51,4 +51,4 @@ def PRODUCT_COMPLEMENTS(order: str | None, direction: str | None):
 
 def PRODUCT_SEARCH():
     return """ WHERE (prod.name LIKE :search
-        or prod.cost_per_bag ILIKE :search  """
+        or prod.cost_per_bag ILIKE :search ) """

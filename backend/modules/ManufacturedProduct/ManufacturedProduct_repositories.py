@@ -89,45 +89,6 @@ class ManufacturedProductRepository(BaseRepository):
             raise ManufacturedProductExceptions.ManufacturedProductNotFoundException()
         return self._schema_out(**dict(record))
 
-    async def get_manufactured_product_by_name(self, name: str, order: str | None, direction: str | None) -> List:
-        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import LIST_MANUFACTURED_PRODUCT_BY_NAME, MANUFACTURED_PRODUCT_COMPLEMENTS
-
-        order = order.lower() if order else None
-        direction = direction.upper() if direction else None
-        sql_sentence = MANUFACTURED_PRODUCT_COMPLEMENTS(order, direction)
-
-        values = {"name": name}
-        sql_sentence = LIST_MANUFACTURED_PRODUCT_BY_NAME + sql_sentence
-
-        try:
-            records = await self.db.fetch_all(query=sql_sentence, values=values)
-            if not records:
-                return []
-
-            return [ManufacturedProductList(**dict(record)) for record in records]
-
-        except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductException()
-
-    async def get_manufactured_product_by_lot_number(self, lot_number: str, order: str | None, direction: str | None) -> List:
-        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER, MANUFACTURED_PRODUCT_COMPLEMENTS
-
-        order = order.lower() if order else None
-        direction = direction.upper() if direction else None
-        sql_sentence = MANUFACTURED_PRODUCT_COMPLEMENTS(order, direction)
-
-        values = {"lot_number": lot_number}
-        sql_sentence = LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER + sql_sentence
-
-        try:
-            records = await self.db.fetch_all(query=sql_sentence, values=values)
-            if not records:
-                return []
-
-            return [ManufacturedProductList(**dict(record)) for record in records]
-
-        except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductException()
 
     async def delete_manufactured_product_by_id(self,id: UUID,) -> str | dict:
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import DELETE_MANUFACTURED_PRODUCT_BY_ID

@@ -53,4 +53,4 @@ def WAREHOUSE_COMPLEMENTS(order: str | None, direction: str | None):
 
 
 def WAREHOUSE_SEARCH():
-    return """ WHERE (wh.name ILIKE :search or wh.type ILIKE :search or wh.type_num ILIKE :search """
+    return """ WHERE (wh.name ILIKE :search or wh.type::text ILIKE :search or wh.type_num ILIKE :search) """

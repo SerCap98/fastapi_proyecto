@@ -43,4 +43,4 @@ def FACTORY_COMPLEMENTS(order: str | None, direction: str | None):
     return sql_sentence
 
 def FACTORY_SEARCH():
-    return """ WHERE (fty.identifier LIKE :search """
+    return """ WHERE (fty.identifier LIKE :search) """

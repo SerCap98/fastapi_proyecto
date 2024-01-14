@@ -54,6 +54,7 @@ async def get_all_product(
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 )-> ServiceResult:
+    print("hola")
     if not is_authorized(current_user, "Product:get-all-Product"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :

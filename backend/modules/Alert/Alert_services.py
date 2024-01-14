@@ -66,6 +66,39 @@ class AlertService:
         except Exception as e:
             return ServiceResult(e)
         
+
+
+
+    async def get_all_alert(self, 
+            search: str | None,
+            page_num: int = 1,
+            page_size: int = 10,
+            order: str = None,
+            direction: str = None,
+        ) -> ServiceResult:
+            try:
+              
+                alert = await AlertRepository(self.db).get_all_alert(search,order,direction)
+          
+                alert_list = [AlertList(**item.dict()) for item in alert]
+           
+                response = short_pagination(
+                    page_num=page_num,
+                    page_size=page_size,
+                    data_list=alert_list,
+                    route=f"{API_PREFIX}/alerts",
+                )
+           
+                return ServiceResult(response)
+            except Exception as e:
+                
+
+                return ServiceResult(e)
+            
+
+            
+
+
     async def handle_inventory_update(self, event: InventoryUpdatedEvent):
      
         if event.new_quantity < event.min_quantity:

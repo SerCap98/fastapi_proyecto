@@ -51,4 +51,4 @@ def RAW_MATERIALS_COMPLEMENTS(order: str | None, direction: str | None):
 
 def RAW_MATERIALS_SEARCH():
     return """ WHERE (raw.name ILIKE :search 
-        or raw.code ILIKE :search  """
+        or raw.code ILIKE :search)  """
