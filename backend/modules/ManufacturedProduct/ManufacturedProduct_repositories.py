@@ -23,7 +23,7 @@ class ManufacturedProductRepository(BaseRepository):
     def _schema_out(self) -> Type[ManufacturedProductInDB]:
         return ManufacturedProductInDB
 
-    async def create_manufactured_product(self, ManufacturedProduct: ManufacturedProduct,current_user: UserInDB, product:UUID) -> ManufacturedProductInDB:
+    async def create_manufactured_product(self, ManufacturedProduct: ManufacturedProduct,current_user: UserInDB, id_product:UUID) -> ManufacturedProductInDB:
 
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import CREATE_MANUFACTURED_PRODUCT
 
@@ -32,7 +32,7 @@ class ManufacturedProductRepository(BaseRepository):
 
         values = {
             "id": ManufacturedProduct_id ,
-            "id_product": product ,
+            "id_product": id_product ,
             "lot_number": ManufacturedProduct.lot_number if ManufacturedProduct.lot_number else None,
             "quantity":40,
             "created_by": current_user.id,
@@ -79,3 +79,38 @@ class ManufacturedProductRepository(BaseRepository):
         except Exception as e:
             print(f"Error: {e}")
             raise ManufacturedProductExceptions.ManufacturedProductException()
+
+    async def get_manufactured_product_by_id(self, id:UUID) -> ManufacturedProductInDB:
+        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import GET_MANUFACTURED_PRODUCT_BY_ID
+        values = { "id": id }
+
+        record = await self.db.fetch_one(query=GET_MANUFACTURED_PRODUCT_BY_ID, values=values)
+        if not record:
+            raise ManufacturedProductExceptions.ManufacturedProductNotFoundException()
+        return self._schema_out(**dict(record))
+
+    async def update_manufactured_product_by_id(self, current_user: UserInDB, id: UUID, new_product_name:str) -> ManufacturedProductInDB:
+        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import UPDATE_MANUFACTURED_PRODUCT_BY_ID
+        current_time = datetime.now()
+        try:
+            values = {
+                "id":id,
+                "product_name":new_product_name,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=UPDATE_MANUFACTURED_PRODUCT_BY_ID , values=values)
+        except Exception as e:
+            raise ManufacturedProductExceptions.ManufacturedProductException(e)
+        return self._schema_out(**dict(record))
+
+    async def delete_manufactured_product_by_id(self, id:UUID) -> bool:
+        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import DELETE_MANUFACTURED_PRODUCT_BY_ID
+        try:
+            values = {"id": id }
+
+            record = await self.db.fetch_one(query=DELETE_MANUFACTURED_PRODUCT_BY_ID, values=values)
+        except Exception as e:
+            raise ManufacturedProductExceptions.ManufacturedProductDeleteException()
+        return True
