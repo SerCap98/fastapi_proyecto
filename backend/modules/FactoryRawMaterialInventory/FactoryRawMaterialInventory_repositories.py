@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import List, Type
 from uuid import UUID
 import uuid
+from shared.utils.events import EventBus, InventoryUpdatedEvent
 from shared.utils.service_result import ServiceResult
 from modules.users.users.user_schemas import UserInDB
 from shared.utils.record_to_dict import record_to_dict
@@ -78,7 +79,9 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
             record = await self.db.fetch_one(query=INCREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
         except Exception as e:
             raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
-        return self._schema_out(**dict(record))
+        
+        result=self._schema_out(**dict(record))
+        return result
     
     async def decrease_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,decrease_quantity:float) -> FactoryRawMaterialInventoryInDB:
         from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import DECREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY 
@@ -95,7 +98,10 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
             record = await self.db.fetch_one(query=DECREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
         except Exception as e:
             raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
-        return self._schema_out(**dict(record))
+        result=self._schema_out(**dict(record))
+        event = InventoryUpdatedEvent(result.id, result.quantity, result.min_quantity,current_user)
+        await EventBus.publish(event)
+        return result
     
     async def update_min_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,new_min_quantity:float) -> FactoryRawMaterialInventoryInDB:
         from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import UPDATE_MIN_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY 

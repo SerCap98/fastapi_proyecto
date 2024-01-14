@@ -3,6 +3,7 @@ import os
 from databases import Database
 from fastapi import FastAPI
 from loguru import logger
+from modules.Alert.Alert_services import AlertService
 
 from modules.users.users.user_repositories import UserRepository
 from modules.users.roles.role_schemas import RoleOut
@@ -25,7 +26,8 @@ async def connect_to_db(app: FastAPI) -> None:
 
         await database.connect()
         app.state._db = database
-
+        alert_service = AlertService(database)
+        
         await verify_super_admin(db=database)
 
         logger.info("Database connection - successful")
