@@ -75,11 +75,12 @@ class ManufacturedProductRepository(BaseRepository):
         except Exception as e:
             raise ManufacturedProductExceptions.ManufacturedProductException()
 
-    async def get_manufactured_product_by_id(self, id:UUID) -> ManufacturedProductInDB:
+    async def get_manufactured_product_by_id(self, id: UUID) -> UserInDB | dict:
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import GET_MANUFACTURED_PRODUCT_BY_ID
-        values = { "id": id }
 
+        values = {"id": id}
         record = await self.db.fetch_one(query=GET_MANUFACTURED_PRODUCT_BY_ID, values=values)
+
         if not record:
             raise ManufacturedProductExceptions.ManufacturedProductNotFoundException()
         return self._schema_out(**dict(record))
@@ -100,12 +101,12 @@ class ManufacturedProductRepository(BaseRepository):
             raise ManufacturedProductExceptions.ManufacturedProductException(e)
         return self._schema_out(**dict(record))
 
-    async def delete_manufactured_product_by_id(self, id:UUID) -> bool:
+    async def delete_manufactured_product_by_id(self, id:UUID) -> str | dict:
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import DELETE_MANUFACTURED_PRODUCT_BY_ID
         try:
             values = {"id": id }
 
             record = await self.db.fetch_one(query=DELETE_MANUFACTURED_PRODUCT_BY_ID, values=values)
         except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductDeleteException()
-        return True
+            raise ManufacturedProductExceptions.ManufacturedProductDeleteException(e)
+        return self._schema_out(**dict(record))

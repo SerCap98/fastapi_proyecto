@@ -6,9 +6,9 @@ CREATE_MANUFACTURED_PRODUCT = """
 """
 
 GET_MANUFACTURED_PRODUCT_BY_ID = """
-    SELECT id, id_product, lot_number, quantity, created_by, created_at
-    FROM manufactured_product
-    WHERE id = :id;
+    SELECT mp.id, mp.id_product, mp.lot_number, mp.quantity, mp.created_by, mp.created_at
+    FROM manufactured_product AS mp
+    WHERE mp.id = :id;
 """
 
 UPDATE_MANUFACTURED_PRODUCT_BY_ID = """

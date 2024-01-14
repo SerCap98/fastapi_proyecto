@@ -8,13 +8,7 @@ from shared.utils.schemas_base import BaseSchema, DateTimeModelMixin, IDModelMix
 class ManufacturedProduct(BaseSchema):
     product_name: Optional[str] = None
 
-<<<<<<< HEAD
-class ManufacturedProductInDB(ManufacturedProduct,DateTimeModelMixin,IDModelMixin):
-=======
-
-
 class ManufacturedProductInDB(BaseSchema,DateTimeModelMixin,IDModelMixin):
->>>>>>> b4e9e8a27de17661c1d2c9cfd107e69a3cf4c9e3
     id_product: UUID
     lot_number: str
     quantity: int

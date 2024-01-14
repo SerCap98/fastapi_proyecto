@@ -53,12 +53,12 @@ async def get_all_manufactured_product(
         return handle_result(result)
 
 #GET BY ID
-@router.get("/get-manufactured-product",name="ManufacturedProduct:get-manufactured-product-by-id", response_model=ManufacturedProductInDB,status_code=status.HTTP_200_OK)
+@router.get("/{id}", response_model=ManufacturedProductInDB, name="ManufacturedProduct:get-manufactured-product-by-id")
 async def get_manufactured_product_by_id(
-    id: UUID = Query(..., title="The id of the manufactured product"),
+    id: UUID = Path(..., title="The id of the manufactured product"),
     db: Database = Depends(get_database),
-    current_user: UserInDB = Depends(get_current_active_user)
-)-> ServiceResult:
+    current_user: UserInDB = Depends(get_current_active_user),
+) -> ServiceResult:
     if not is_authorized(current_user, "ManufacturedProduct:get-manufactured-product-by-id"):
         return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
     else :

@@ -75,10 +75,10 @@ class ManufacturedProductService:
 
     async def get_manufactured_product_by_id(self, id: UUID) -> ServiceResult:
         try:
-            manufactured_product = await ManufacturedProductRepository(self.db).get_product_by_name(id)
+            manufactured_product = await ManufacturedProductRepository(self.db).get_manufactured_product_by_id(id=id)
             return ServiceResult(manufactured_product)
-        except Exception  as e:
 
+        except Exception  as e:
             return ServiceResult(e)
 
 
