@@ -26,11 +26,20 @@ class ManufacturedProductRepository(BaseRepository):
 
         ManufacturedProduct_id = str(uuid.uuid4())
         current_time = datetime.now()
+        year, week, day = current_time.isocalendar()
+        year_short = year % 100  # Obtener los dos últimos dígitos del año
+
+        lot_number = f"{year_short:02d}-{week:02d}-{day}"
 
         values = {
             "id": ManufacturedProduct_id ,
+<<<<<<< HEAD
             "id_product": id_product ,
             "lot_number": "123-456-789",
+=======
+            "id_product": product ,
+            "lot_number": lot_number,
+>>>>>>> a74c178f87e1b1b4acc4770392dd38bebf6d5b56
             "quantity":40,
             "created_by": current_user.id,
             "created_at": current_time
@@ -110,3 +119,44 @@ class ManufacturedProductRepository(BaseRepository):
         except Exception as e:
             raise ManufacturedProductExceptions.ManufacturedProductDeleteException(e)
         return self._schema_out(**dict(record))
+        
+    async def get_manufactured_product_by_name(self, name: str, order: str | None, direction: str | None) -> List:
+        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import LIST_MANUFACTURED_PRODUCT_BY_NAME, MANUFACTURED_PRODUCT_COMPLEMENTS
+
+        order = order.lower() if order else None
+        direction = direction.upper() if direction else None
+        sql_sentence = MANUFACTURED_PRODUCT_COMPLEMENTS(order, direction)
+
+        values = {"name": name}
+        sql_sentence = LIST_MANUFACTURED_PRODUCT_BY_NAME + sql_sentence
+
+        try:
+            records = await self.db.fetch_all(query=sql_sentence, values=values)
+            if not records:
+                return []
+
+            return [ManufacturedProductList(**dict(record)) for record in records]
+
+        except Exception as e:
+            raise ManufacturedProductExceptions.ManufacturedProductException()
+        
+    async def get_manufactured_product_by_lot_number(self, lot_number: str, order: str | None, direction: str | None) -> List:
+        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER, MANUFACTURED_PRODUCT_COMPLEMENTS
+
+        order = order.lower() if order else None
+        direction = direction.upper() if direction else None
+        sql_sentence = MANUFACTURED_PRODUCT_COMPLEMENTS(order, direction)
+
+        values = {"lot_number": lot_number}
+        sql_sentence = LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER + sql_sentence
+
+        try:
+            records = await self.db.fetch_all(query=sql_sentence, values=values)
+            if not records:
+                return []
+
+            return [ManufacturedProductList(**dict(record)) for record in records]
+
+        except Exception as e:
+            raise ManufacturedProductExceptions.ManufacturedProductException()
+

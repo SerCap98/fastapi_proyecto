@@ -89,3 +89,45 @@ async def delete_manufactured_product_by_id(
     else :
         result = await ManufacturedProductService(db).delete_manufactured_product_by_id(id)
         return handle_result(result)
+
+@router.get("/get-manufactured_product/by-name/{name}", name="ManufacturedProduct:get-manufactured-product-by-name", response_model=Dict, status_code=status.HTTP_200_OK)
+async def get_manufactured_product_by_name(
+    name: str,
+    page_number: int = 1,
+    page_size: int = 10,
+    order: str = "",
+    direction: str = "",
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+    if not is_authorized(current_user, "ManufacturedProduct:get-manufactured-product-by-name"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else:
+        result = await ManufacturedProductService(db).get_manufactured_product_by_name(
+            name,
+            page_num=page_number,
+            page_size=page_size,
+            order=order,
+            direction=direction)
+        return handle_result(result)
+    
+@router.get("/get-manufactured_product/by_lot_number/{lot_number}", name="ManufacturedProduct:get-manufactured-product-by-lot_number", response_model=Dict, status_code=status.HTTP_200_OK)
+async def get_manufactured_product_by_lot_number(
+    lot_number: str,
+    page_number: int = 1,
+    page_size: int = 10,
+    order: str = "",
+    direction: str = "",
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+    if not is_authorized(current_user, "ManufacturedProduct:get-manufactured-product-by-lot_number"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else:
+        result = await ManufacturedProductService(db).get_manufactured_product_by_lot_number(
+            lot_number,
+            page_num=page_number,
+            page_size=page_size,
+            order=order,
+            direction=direction)
+        return handle_result(result)
