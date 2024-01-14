@@ -105,6 +105,19 @@ class FormulaService:
 
             return ServiceResult(e)
 
+    async def delete_formula_by_product(self, product_name: str) -> ServiceResult:
+        try:
+            exist_product = await self.exist_Product(product_name)
+            if not exist_product.success:
+                return exist_product
+
+            product_id = uuid.UUID(str(exist_product.value["product_id"]))
+
+            await FormulaRepository(self.db).delete_formula_by_product(product_id)
+            return ServiceResult({"message": "Records deleted successfully"})
+        except Exception  as e:
+            return ServiceResult(e)
+
 
     async def exist_RawMaterial_Product(self, raw_material_code: str, product_name: str) -> ServiceResult:
         Raw_Material_services=RawMaterialService(self.db)
@@ -119,6 +132,22 @@ class FormulaService:
 
             result = {
                     "raw_material_id": exist_raw_material.value.id,
+                    "product_id": exist_product.value.id
+                }
+
+            return ServiceResult(result)
+
+        except Exception as e:
+            return ServiceResult(e)
+    
+    async def exist_Product(self, product_name: str) -> ServiceResult:
+        Product_services=ProductService(self.db)
+
+        try:
+            exist_product=await Product_services.get_product_by_name(product_name.upper())
+            if not exist_product.success:return exist_product
+
+            result = {
                     "product_id": exist_product.value.id
                 }
 

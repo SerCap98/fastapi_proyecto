@@ -114,6 +114,15 @@ class FormulaRepository(BaseRepository):
             raise FormulaExceptions.FormulaException()
         return True
 
+    async def delete_formula_by_product(self, product: UUID) -> bool:
+        from modules.Formula.Formula_sqlstaments import DELETE_PRODUCT_FORMULA
+        try:
+            values = {"product": product}
+            record = await self.db.execute(query=DELETE_PRODUCT_FORMULA, values=values)
+        except Exception as e:
+            raise FormulaExceptions.FormulaException()
+        return True
+
     async def get_all_formula(self, search: str | None, order: str | None, direction: str | None ) -> List:
         from modules.Formula.Formula_sqlstaments import LIST_FORMULA,FORMULA_COMPLEMENTS,FORMULA_SEARCH
 
