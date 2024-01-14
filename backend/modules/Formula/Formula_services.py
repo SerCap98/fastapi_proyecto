@@ -58,6 +58,38 @@ class FormulaService:
             return ServiceResult(e)
 
 
+    async def increase_quantity_by_material_and_product(self,current_user: UserInDB,increase_quantity:float, raw_material_code: str, product_name:str) -> ServiceResult:
+        try:
+
+            exist_raw_material_and_product=await self.exist_RawMaterial_Product(raw_material_code, product_name)
+            if not exist_raw_material_and_product.success:
+                return exist_raw_material_and_product
+
+            product_id=uuid.UUID(str(exist_raw_material_and_product.value["product_id"]))
+            raw_material_id=uuid.UUID(str(exist_raw_material_and_product.value["raw_material_id"]))
+
+            formula = await FormulaRepository(self.db).increase_quantity_by_material_and_product(current_user,increase_quantity,product_id, raw_material_id)
+            return ServiceResult(formula)
+        except Exception  as e:
+            return ServiceResult(e)
+
+    async def decrease_quantity_by_material_and_product(self,current_user: UserInDB,decrease_quantity:float,raw_material_code: str, product_name:str) -> ServiceResult:
+        try:
+
+            exist_raw_material_and_product=await self.exist_RawMaterial_Product(raw_material_code, product_name)
+            if not exist_raw_material_and_product.success:
+                return exist_raw_material_and_product
+
+            product_id=uuid.UUID(str(exist_raw_material_and_product.value["product_id"]))
+            raw_material_id=uuid.UUID(str(exist_raw_material_and_product.value["raw_material_id"]))
+
+            formula = await FormulaRepository(self.db).decrease_quantity_by_material_and_product(current_user,decrease_quantity, product_id, raw_material_id)
+            return ServiceResult(formula)
+        except Exception  as e:
+            return ServiceResult(e)
+
+
+
     async def exist_RawMaterial_Product(self, raw_material_code: str, product_name: str) -> ServiceResult:
         Raw_Material_services=RawMaterialService(self.db)
         Product_services=ProductService(self.db)

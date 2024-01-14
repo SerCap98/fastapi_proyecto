@@ -43,6 +43,36 @@ async def get_formula_by_RawMaterial_and_Product(
         result = await FormulaService(db).get_formula_by_RawMaterial_and_Product(raw_material_code, product_name)
         return handle_result(result)
 
+
+@router.put("/increase-quantity",name="Form:increase-quantity-by-material-and-product", response_model=FormulaInDB,status_code=status.HTTP_200_OK)
+async def increase_quantity_by_material_and_product(
+    increase_quantity: float= Query(..., title="The amount to increase"),
+    raw_material_code: str = Query(..., title="The code of the raw material"),
+    product_name: str = Query(..., title="The name of the product"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+         if not is_authorized(current_user, "Form:increase-quantity-by-material-and-product"):
+            return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+         else :
+            result = await FormulaService(db).increase_quantity_by_material_and_product(current_user,increase_quantity, raw_material_code, product_name)
+            return handle_result(result)
+
+@router.put("/decrease-quantity",name="Form:decrease-quantity-by-material-and-product", response_model=FormulaInDB,status_code=status.HTTP_200_OK)
+async def decrease_quantity_by_material_and_product(
+    decrease_quantity: float= Query(..., title="The amount to decrease"),
+    raw_material_code: str = Query(..., title="The code of the raw material"),
+    product_name: str = Query(..., title="The name of the product"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+         if not is_authorized(current_user, "Form:decrease-quantity-by-material-and-product"):
+            return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+         else :
+            result = await FormulaService(db).decrease_quantity_by_material_and_product(current_user,decrease_quantity, raw_material_code, product_name)
+            return handle_result(result)
+
+
 @router.get("/get-formula/all/", name="Formula:get-all-formula",response_model=Dict,status_code=status.HTTP_200_OK)
 async def get_all_formula(
     search: str | None = None,

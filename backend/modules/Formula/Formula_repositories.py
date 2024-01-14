@@ -9,6 +9,7 @@ from shared.utils.repositories_base import BaseRepository
 
 from modules.Formula.Formula_exceptions import FormulaExceptions
 from modules.Formula.Formula_schemas import Formula,FormulaInDB,FormulaList
+from shared.utils.events import EventBus, FormulaUpdatedEvent
 
 #import logging
 #logger = logging.getLogger(__name__)
@@ -60,6 +61,46 @@ class FormulaRepository(BaseRepository):
         if not record:
             raise FormulaExceptions.FormulaNotFoundException()
         return self._schema_out(**dict(record))
+
+    async def increase_quantity_by_material_and_product(self,current_user: UserInDB,increase_quantity:float,product:UUID, raw_material:UUID ) -> FormulaInDB:
+        from modules.Formula.Formula_sqlstaments import INCREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA
+        current_time = datetime.now()
+        try:
+            values = {
+                "quantity":increase_quantity,
+                "raw_material": raw_material,
+                "product": product ,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=INCREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA , values=values)
+        except Exception as e:
+            raise FormulaExceptions.FormulaException(e)
+
+        result=self._schema_out(**dict(record))
+        return result
+
+    async def decrease_quantity_by_material_and_product(self,current_user: UserInDB,decrease_quantity:float,product:UUID, raw_material:UUID) -> FormulaInDB:
+        from modules.Formula.Formula_sqlstaments import DECREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA
+        current_time = datetime.now()
+        try:
+            values = {
+                "quantity":decrease_quantity,
+                "raw_material": raw_material,
+                "product": product ,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=DECREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA , values=values)
+        except Exception as e:
+            raise FormulaExceptions.FormulaException(e)
+        result=self._schema_out(**dict(record))
+        event = FormulaUpdatedEvent(result.id, result.quantity, current_user)
+        await EventBus.publish(event)
+        return result
+
 
     async def get_all_formula(self, search: str | None, order: str | None, direction: str | None ) -> List:
         from modules.Formula.Formula_sqlstaments import LIST_FORMULA,FORMULA_COMPLEMENTS,FORMULA_SEARCH

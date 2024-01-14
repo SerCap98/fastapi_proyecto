@@ -10,6 +10,12 @@ class InventoryUpdatedEvent:
         self.min_quantity = min_quantity
         self.current_user = current_user
 
+class FormulaUpdatedEvent:
+    def __init__(self, formula_id: UUID, new_quantity: float, current_user:UserInDB):
+        self.formula_id = formula_id
+        self.new_quantity = new_quantity
+        self.current_user = current_user
+
 
 class EventBus:
     subscribers = {}

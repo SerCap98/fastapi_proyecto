@@ -13,7 +13,7 @@ GET_RAW_MATERIAL_PRODUCT_FORMULA = """
     WHERE id_raw_material = :raw_material AND id_product = :product;
 """
 
-INCREASE_QUANTITY_PRODUCT_RAW_MATERIAL_FORMULA = """
+INCREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA = """
     UPDATE formula
     SET quantity = quantity + :quantity,
         updated_at = :updated_at,
@@ -22,7 +22,7 @@ INCREASE_QUANTITY_PRODUCT_RAW_MATERIAL_FORMULA = """
     RETURNING id, quantity, id_raw_material, id_product, created_by, created_at, updated_by, updated_at;
 """
 
-DECREASE_QUANTITY_PRODUCT_RAW_MATERIAL_FORMULA = """
+DECREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA = """
     UPDATE formula
     SET quantity = CASE
                        WHEN quantity - :quantity < 0 THEN 0
