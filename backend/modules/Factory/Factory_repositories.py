@@ -27,7 +27,7 @@ class FactoryRepository(BaseRepository):
 
         factory_id = str(uuid.uuid4())
         current_time = datetime.now()
-        print(factory_id)
+      
 
         values = {
             "id": factory_id ,
@@ -35,9 +35,9 @@ class FactoryRepository(BaseRepository):
             "created_by": current_user.id,
             "created_at": current_time
             }
-        print(values)
+      
         try:
-            print(values)
+           
             record = await self.db.fetch_one(query=CREATE_FACTORY, values=values)
         except Exception as e:
             raise FactoryExceptions.FactoryInvalidCreateParamsException(e=e)

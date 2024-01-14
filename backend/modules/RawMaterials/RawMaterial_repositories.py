@@ -27,7 +27,7 @@ class RawMaterialRepository(BaseRepository):
        
         raw_material_id = str(uuid.uuid4())
         current_time = datetime.now()
-        print(raw_material_id)
+ 
         
         values = {
             "id": raw_material_id ,
@@ -36,9 +36,9 @@ class RawMaterialRepository(BaseRepository):
             "created_by": current_user.id,
             "created_at": current_time
             }
-        print(values)
+  
         try:
-            print(values)
+     
             record = await self.db.fetch_one(query=CREATE_RAW_MATERIAL, values=values)
         except Exception as e:
             raise RawMaterialExceptions.RawMaterialInvalidCreateParamsException(e=e)
@@ -106,5 +106,4 @@ class RawMaterialRepository(BaseRepository):
         
 
         except Exception as e:
-            print(e)
             raise RawMaterialExceptions.RawMaterialListException

@@ -28,7 +28,7 @@ class ProductRepository(BaseRepository):
        
         product_id = str(uuid.uuid4())
         current_time = datetime.now()
-        print(product_id)
+  
         
         values = {
             "id": product_id ,
@@ -37,9 +37,9 @@ class ProductRepository(BaseRepository):
             "created_by": current_user.id,
             "created_at": current_time
             }
-        print(values)
+   
         try:
-            print(values)
+        
             record = await self.db.fetch_one(query=CREATE_PRODUCT, values=values)
         except Exception as e:
             raise ProductExceptions.ProductInvalidCreateParamsException(e=e)

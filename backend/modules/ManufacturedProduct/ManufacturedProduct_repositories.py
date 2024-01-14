@@ -69,10 +69,8 @@ class ManufacturedProductRepository(BaseRepository):
             if len(records) == 0 or not records:
                 return []
 
-            print([ManufacturedProductList(**dict(record)) for record in records])
 
             return [ManufacturedProductList(**dict(record)) for record in records]
 
         except Exception as e:
-            print(f"Error: {e}")
             raise ManufacturedProductExceptions.ManufacturedProductException()

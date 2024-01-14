@@ -10,7 +10,7 @@ class ManufacturedProduct(BaseSchema):
 
 
 
-class ManufacturedProductInDB(ManufacturedProduct,DateTimeModelMixin,IDModelMixin):
+class ManufacturedProductInDB(BaseSchema,DateTimeModelMixin,IDModelMixin):
     id_product: UUID
     lot_number: str
     quantity: int
