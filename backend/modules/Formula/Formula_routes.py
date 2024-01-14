@@ -73,6 +73,20 @@ async def decrease_quantity_by_material_and_product(
             return handle_result(result)
 
 
+@router.delete("/delete-formula",name="Form:delete-formula-by-material-and-product", response_model=dict,status_code=status.HTTP_200_OK)
+
+async def delete_formula_by_material_and_product(
+    raw_material_code: str = Query(..., title="The code of the raw material"),
+    product_name: str = Query(..., title="The name of the product"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+)-> ServiceResult:
+    if not is_authorized(current_user, "Form:delete-formula-by-material-and-product"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else :
+        result = await FormulaService(db).delete_formula_by_material_and_product(raw_material_code, product_name)
+        return handle_result(result)
+
 @router.get("/get-formula/all/", name="Formula:get-all-formula",response_model=Dict,status_code=status.HTTP_200_OK)
 async def get_all_formula(
     search: str | None = None,

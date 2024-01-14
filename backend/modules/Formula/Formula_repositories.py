@@ -101,6 +101,18 @@ class FormulaRepository(BaseRepository):
         await EventBus.publish(event)
         return result
 
+    async def delete_formula_by_material_and_product(self,product: UUID, raw_material:UUID) -> bool:
+        from modules.Formula.Formula_sqlstaments import DELETE_RAW_MATERIAL_PRODUCT_FORMULA
+        try:
+            values = {
+                "raw_material": raw_material,
+                "product": product
+                }
+
+            record = await self.db.fetch_one(query=DELETE_RAW_MATERIAL_PRODUCT_FORMULA, values=values)
+        except Exception as e:
+            raise FormulaExceptions.FormulaException()
+        return True
 
     async def get_all_formula(self, search: str | None, order: str | None, direction: str | None ) -> List:
         from modules.Formula.Formula_sqlstaments import LIST_FORMULA,FORMULA_COMPLEMENTS,FORMULA_SEARCH

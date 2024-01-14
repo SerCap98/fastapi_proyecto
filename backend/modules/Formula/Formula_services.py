@@ -89,6 +89,22 @@ class FormulaService:
             return ServiceResult(e)
 
 
+    async def delete_formula_by_material_and_product(self, raw_material_code: str, product_name:str) -> ServiceResult:
+        try:
+
+            exist_raw_material_and_product=await self.exist_RawMaterial_Product(raw_material_code, product_name)
+            if not exist_raw_material_and_product.success:
+                return exist_raw_material_and_product
+
+            product_id=uuid.UUID(str(exist_raw_material_and_product.value["product_id"]))
+            raw_material_id=uuid.UUID(str(exist_raw_material_and_product.value["raw_material_id"]))
+
+            await FormulaRepository(self.db).delete_formula_by_material_and_product(product_id, raw_material_id)
+            return ServiceResult({"message": "Record deleted successfully"})
+        except Exception  as e:
+
+            return ServiceResult(e)
+
 
     async def exist_RawMaterial_Product(self, raw_material_code: str, product_name: str) -> ServiceResult:
         Raw_Material_services=RawMaterialService(self.db)

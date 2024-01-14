@@ -3,7 +3,7 @@ CREATE_FORMULA = """
     VALUES ( :id, :quantity, :raw_material, :product, :created_by, :created_at )
     RETURNING id, quantity, id_raw_material, id_product, created_by, created_at;
 """
-DELETE_PRODUCT_RAW_MATERIAL_FORMULA = """
+DELETE_RAW_MATERIAL_PRODUCT_FORMULA = """
     DELETE FROM formula
     WHERE id_raw_material = :raw_material AND id_product = :product;
 """
