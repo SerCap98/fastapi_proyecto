@@ -51,7 +51,7 @@ LIST_FORMULA = """
     LEFT JOIN product AS prod ON prod.id = fm.id_product
 """
 
-LIST_FORMULA_BY_NAME = """
+LIST_FORMULA_BY_PRODUCT = """
     SELECT fm.id, fm.quantity, fm.created_by, fm.created_at, fm.updated_by, fm.updated_at,
         us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname,
         raw.code AS raw_material_code, prod.name AS product_name
@@ -59,11 +59,11 @@ LIST_FORMULA_BY_NAME = """
     LEFT JOIN users AS us1 ON us1.id = fm.created_by
     LEFT JOIN users AS us2 ON us2.id = fm.updated_by
     LEFT JOIN raw_material AS raw ON raw.id = fm.id_raw_material
-    LEFT JOIN product AS prod ON prod.id = fm.id_product
+    LEFT JOIN product AS prod ON prod.id = mp.id_product
     WHERE prod.name = :name
 """
 
-LIST_FORMULA_BY_CODE = """
+LIST_FORMULA_BY_MATERIAL = """
     SELECT fm.id, fm.quantity, fm.created_by, fm.created_at, fm.updated_by, fm.updated_at,
         us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname,
         raw.code AS raw_material_code, prod.name AS product_name

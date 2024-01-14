@@ -98,6 +98,48 @@ async def delete_formula_by_product(
         result = await FormulaService(db).delete_formula_by_product(product_name)
         return handle_result(result)
 
+@router.get("/get-formula/by-name/{name}", name="Form:get-formula-by-name", response_model=Dict, status_code=status.HTTP_200_OK)
+async def get_formula_by_name(
+    name: str,
+    page_number: int = 1,
+    page_size: int = 10,
+    order: str = "",
+    direction: str = "",
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+    if not is_authorized(current_user, "Form:get-formula-by-name"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else:
+        result = await FormulaService(db).get_formula_by_name(
+            name,
+            page_num=page_number,
+            page_size=page_size,
+            order=order,
+            direction=direction)
+        return handle_result(result)
+
+@router.get("/get-formula/by-mat-code/{code}", name="Form:get-formula-by-mat-code", response_model=Dict, status_code=status.HTTP_200_OK)
+async def get_formula_by_mat_code(
+    code: str,
+    page_number: int = 1,
+    page_size: int = 10,
+    order: str = "",
+    direction: str = "",
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+    if not is_authorized(current_user, "Form:get-inventory-by-mat-code"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else:
+        result = await FormulaService(db).get_formula_by_mat_code(
+            code,
+            page_num=page_number,
+            page_size=page_size,
+            order=order,
+            direction=direction)
+        return handle_result(result)
+
 @router.get("/get-formula/all/", name="Formula:get-all-formula",response_model=Dict,status_code=status.HTTP_200_OK)
 async def get_all_formula(
     search: str | None = None,

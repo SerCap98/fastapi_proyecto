@@ -123,6 +123,46 @@ class FormulaRepository(BaseRepository):
             raise FormulaExceptions.FormulaException()
         return True
 
+    async def get_formula_by_name(self, name: str, order: str | None, direction: str | None) -> List:
+        from modules.Formula.Formula_sqlstaments import LIST_FORMULA_BY_PRODUCT, FORMULA_COMPLEMENTS
+
+        order = order.lower() if order else None
+        direction = direction.upper() if direction else None
+        sql_sentence = FORMULA_COMPLEMENTS(order, direction)
+
+        values = {"name": name}
+        sql_sentence = LIST_FORMULA_BY_PRODUCT + sql_sentence
+
+        try:
+            records = await self.db.fetch_all(query=sql_sentence, values=values)
+            if not records:
+                return []
+
+            return [FormulaList(**dict(record)) for record in records]
+
+        except Exception as e:
+            raise FormulaExceptions.FormulaException()
+
+    async def get_formula_by_mat_code(self, code: str, order: str | None, direction: str | None) -> List:
+        from modules.Formula.Formula_sqlstaments import  LIST_FORMULA_BY_MATERIAL,FORMULA_COMPLEMENTS
+
+        order = order.lower() if order else None
+        direction = direction.upper() if direction else None
+        sql_sentence = FORMULA_COMPLEMENTS(order, direction)
+
+        values = {"code": code.upper()}
+        sql_sentence = LIST_FORMULA_BY_MATERIAL + sql_sentence
+
+        try:
+            records = await self.db.fetch_all(query=sql_sentence, values=values)
+            if not records:
+                return []
+
+            return [FormulaList(**dict(record)) for record in records]
+
+        except Exception as e:
+            raise FormulaExceptions.FormulaException(e)
+
     async def get_all_formula(self, search: str | None, order: str | None, direction: str | None ) -> List:
         from modules.Formula.Formula_sqlstaments import LIST_FORMULA,FORMULA_COMPLEMENTS,FORMULA_SEARCH
 
@@ -145,4 +185,4 @@ class FormulaRepository(BaseRepository):
 
         except Exception as e:
 
-            raise FormulaExceptions.InventoryListException()
+            raise FormulaExceptions.FormulaListException()
