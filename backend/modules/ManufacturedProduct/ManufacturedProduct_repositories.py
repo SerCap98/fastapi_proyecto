@@ -129,22 +129,6 @@ class ManufacturedProductRepository(BaseRepository):
         except Exception as e:
             raise ManufacturedProductExceptions.ManufacturedProductException()
 
-    async def update_manufactured_product_by_id(self, current_user: UserInDB, id: UUID, new_product_name:str) -> ManufacturedProductInDB:
-        from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import UPDATE_MANUFACTURED_PRODUCT_BY_ID
-        current_time = datetime.now()
-        try:
-            values = {
-                "id":id,
-                "product_name":new_product_name,
-                "updated_by": current_user.id,
-                "updated_at": current_time
-                }
-
-            record = await self.db.fetch_one(query=UPDATE_MANUFACTURED_PRODUCT_BY_ID , values=values)
-        except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductException(e)
-        return self._schema_out(**dict(record))
-
     async def delete_manufactured_product_by_id(self,id: UUID,) -> str | dict:
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import DELETE_MANUFACTURED_PRODUCT_BY_ID
 
