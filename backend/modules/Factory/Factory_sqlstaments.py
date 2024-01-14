@@ -25,7 +25,7 @@ DELETE_FACTORY_BY_IDENTIFIER = """
 
 LIST_FACTORY = """
     SELECT fty.id, fty.identifier, fty.created_by, fty.created_at, fty.updated_by, fty.updated_at,
-        us1.fullname AS created_by, us2.fullname AS updated_by
+        us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname
     FROM factory AS fty
     LEFT JOIN users AS us1 ON us1.id = fty.created_by
     LEFT JOIN users AS us2 ON us2.id = fty.updated_by

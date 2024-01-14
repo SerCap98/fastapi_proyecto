@@ -16,3 +16,10 @@ class RawMaterialInDB(RawMaterial,DateTimeModelMixin,IDModelMixin):
     created_by: UUID | str |  None
     updated_by: UUID | str |  None
 
+class RawMaterialList(RawMaterial,DateTimeModelMixin,IDModelMixin):
+    name: str
+    code: str
+    created_by: UUID | str |  None
+    created_by_fullname: str |  None
+    updated_by: UUID | str |  None
+    updated_by_fullname: str |  None

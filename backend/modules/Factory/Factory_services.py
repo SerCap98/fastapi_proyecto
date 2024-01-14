@@ -3,7 +3,7 @@ from shared.utils.short_pagination import short_pagination
 from modules.users.users.user_schemas import UserInDB
 from modules.Factory.Factory_exceptions import FactoryExceptions
 from modules.Factory.Factory_repositories import FactoryRepository
-from modules.Factory.Factory_schemas import Factory
+from modules.Factory.Factory_schemas import Factory, FactoryInDB, FactoryList
 from shared.utils.service_result import ServiceResult
 from databases import Database
 from uuid import UUID
@@ -63,7 +63,7 @@ class FactoryService:
         try:
 
             factory = await FactoryRepository(self.db).get_all_factory(search,order,direction)
-            factory_list = [Factory(**item.dict()) for item in factory]
+            factory_list = [FactoryList(**item.dict()) for item in factory]
             response = short_pagination(
                 page_num=page_num,
                 page_size=page_size,

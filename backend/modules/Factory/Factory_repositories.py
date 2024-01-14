@@ -7,7 +7,7 @@ from shared.utils.service_result import ServiceResult
 from modules.users.users.user_schemas import UserInDB
 
 from modules.Factory.Factory_exceptions import FactoryExceptions
-from modules.Factory.Factory_schemas import Factory,FactoryInDB
+from modules.Factory.Factory_schemas import Factory,FactoryInDB, FactoryList
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
@@ -100,7 +100,7 @@ class FactoryRepository(BaseRepository):
             if len(records) == 0 or not records:
                 return []
 
-            return [self._schema_out(**dict(record)) for record in records]
+            return [FactoryList(**dict(record)) for record in records]
 
         except Exception as e:
             raise FactoryExceptions.FactoryListException

@@ -7,7 +7,7 @@ from shared.utils.service_result import ServiceResult
 from modules.users.users.user_schemas import UserInDB
 
 from modules.RawMaterials.RawMaterial_exceptions import RawMaterialExceptions
-from modules.RawMaterials.RawMaterial_schemas import RawMaterial,RawMaterialInDB
+from modules.RawMaterials.RawMaterial_schemas import RawMaterial,RawMaterialInDB, RawMaterialList
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
@@ -102,8 +102,9 @@ class RawMaterialRepository(BaseRepository):
             if len(records) == 0 or not records:
                 return []
 
-            return [self._schema_out(**dict(record)) for record in records]
+            return [RawMaterialList(**dict(record)) for record in records]
         
 
         except Exception as e:
+            print(e)
             raise RawMaterialExceptions.RawMaterialListException

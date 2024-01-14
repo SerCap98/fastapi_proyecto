@@ -7,7 +7,7 @@ from shared.utils.service_result import ServiceResult
 from modules.users.users.user_schemas import UserInDB
 
 from modules.Product.Product_exceptions import ProductExceptions
-from modules.Product.Product_schemas import Product,ProductInDB
+from modules.Product.Product_schemas import Product,ProductInDB, ProductList
 from shared.utils.record_to_dict import record_to_dict
 from shared.utils.repositories_base import BaseRepository
 
@@ -103,7 +103,7 @@ class ProductRepository(BaseRepository):
             if len(records) == 0 or not records:
                 return []
 
-            return [self._schema_out(**dict(record)) for record in records]
+            return [ProductList(**dict(record)) for record in records]
         
 
         except Exception as e:

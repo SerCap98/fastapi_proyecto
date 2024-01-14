@@ -17,9 +17,11 @@ class ManufacturedProductInDB(ManufacturedProduct,DateTimeModelMixin,IDModelMixi
     created_by: UUID | str |  None
     updated_by: UUID | str |  None
 
-class ManufacturedProductList(BaseSchema,DateTimeModelMixin,IDModelMixin):
+class ManufacturedProductList(ManufacturedProduct,DateTimeModelMixin,IDModelMixin):
     product_name: str
     lot_number: str
     quantity: int
     created_by: UUID | str |  None
+    created_by_fullname: str |  None
     updated_by: UUID | str |  None
+    updated_by_fullname: str |  None

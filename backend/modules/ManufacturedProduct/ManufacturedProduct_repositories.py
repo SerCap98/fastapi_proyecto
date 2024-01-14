@@ -10,9 +10,6 @@ from shared.utils.repositories_base import BaseRepository
 from modules.ManufacturedProduct.ManufacturedProduct_exceptions import ManufacturedProductExceptions
 from modules.ManufacturedProduct.ManufacturedProduct_schemas import ManufacturedProduct,ManufacturedProductInDB,ManufacturedProductList
 
-#import logging
-#logger = logging.getLogger(__name__)
-#logging.basicConfig(level=logging.DEBUG)
 
 class ManufacturedProductRepository(BaseRepository):
     @property
@@ -33,14 +30,14 @@ class ManufacturedProductRepository(BaseRepository):
         values = {
             "id": ManufacturedProduct_id ,
             "id_product": product ,
-            "lot_number": ManufacturedProduct.lot_number if ManufacturedProduct.lot_number else None,
+            "lot_number": "123-456-789",
             "quantity":40,
             "created_by": current_user.id,
             "created_at": current_time
             }
 
         try:
-            print(values["id"])
+ 
             record = await self.db.fetch_one(query=CREATE_MANUFACTURED_PRODUCT , values=values)
 
         except Exception as e:

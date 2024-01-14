@@ -27,7 +27,7 @@ DELETE_RAW_MATERIAL_BY_CODE = """
 
 LIST_RAW_MATERIALS = """
     SELECT raw.id, raw.name, raw.code, raw.created_by, raw.created_at, raw.updated_by, raw.updated_at,
-        us1.fullname AS created_by, us2.fullname AS updated_by
+        us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname
     FROM raw_material AS raw
     LEFT JOIN users AS us1 ON us1.id = raw.created_by
     LEFT JOIN users AS us2 ON us2.id = raw.updated_by

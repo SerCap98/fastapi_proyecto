@@ -1,45 +1,8 @@
 
 CREATE_MANUFACTURED_PRODUCT = """
     INSERT INTO manufactured_product (id, id_product, lot_number, quantity, created_by, created_at)
-    VALUES (:id, :product, :lot_number, :quantity, :created_by, :created_at)
+    VALUES (:id, :id_product, :lot_number, :quantity, :created_by, :created_at)
     RETURNING id, id_product, lot_number, quantity, created_by, created_at;
-"""
-
-DELETE_MANUFACTURED_PRODUCT_BY_ID_PRODUCT = """
-    DELETE FROM manufactured_product
-    WHERE id_product = :product;
-"""
-DELETE_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
-    DELETE FROM manufactured_product
-    WHERE lot_number = :lot_number;
-"""
-
-GET_MANUFACTURED_PRODUCT_BY_ID_PRODUCT = """
-    SELECT id, id_product, lot_number, quantity, created_by, created_at, updated_by, updated_at
-    FROM manufactured_product
-    WHERE id_product = :product;
-"""
-GET_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
-    SELECT id, id_product, lot_number, quantity, created_by, created_at, updated_by, updated_at
-    FROM manufactured_product
-    WHERE lot_number = :lot_number;
-"""
-
-UPDATE_QUANTITY_BY_ID_PRODUCT = """
-    UPDATE manufactured_product
-    SET quantity = :quantity,
-        updated_at = :updated_at,
-        updated_by = :updated_by
-    WHERE id_product = :product
-    RETURNING id, id_product, lot_number, quantity, created_by, created_at, updated_by, updated_at;
-"""
-UPDATE_QUANTITY_BY_LOT_NUMBER = """
-    UPDATE manufactured_product
-    SET quantity = :quantity,
-        updated_at = :updated_at,
-        updated_by = :updated_by
-    WHERE lot_number = :lot_number
-    RETURNING id, id_product, lot_number, quantity, created_by, created_at, updated_by, updated_at;
 """
 
 LIST_MANUFACTURED_PRODUCT = """
