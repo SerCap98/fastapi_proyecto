@@ -41,15 +41,6 @@ LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
     WHERE mp.lot_number = :lot_number  
 """
 
-UPDATE_MANUFACTURED_PRODUCT_BY_ID = """
-    UPDATE manufactured_product
-    SET product_name = :product_name,
-        updated_at = :updated_at,
-        updated_by = :updated_by
-    WHERE id = :id
-    RETURNING id, id_product, lot_number, quantity, created_by, created_at;
-"""
-
 DELETE_MANUFACTURED_PRODUCT_BY_ID = """
     DELETE from manufactured_product
     WHERE id = :id
