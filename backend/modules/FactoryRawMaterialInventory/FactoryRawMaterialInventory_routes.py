@@ -99,7 +99,7 @@ async def decrease_quantity(
 async def update_min_quantity(
     factory_identifier: str = Query(..., title="The identifier of the factory"),
     raw_material_code: str = Query(..., title="The code of the raw material"),
-    new_min_quantity: float= Query(..., title="The amount to decrease"), 
+    new_min_quantity: float= Query(..., title="The new amount"), 
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 ) -> ServiceResult:

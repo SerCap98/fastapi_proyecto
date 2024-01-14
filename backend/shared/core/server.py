@@ -15,7 +15,7 @@ def get_application():
         version=config.VERSION,
         debug=config.DEBUG,
     )
-
+    
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["*"],
@@ -41,3 +41,4 @@ def get_application():
 
 
 app = get_application()
+

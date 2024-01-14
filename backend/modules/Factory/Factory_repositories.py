@@ -63,7 +63,7 @@ class FactoryRepository(BaseRepository):
         }
         try:
             record = await self.db.fetch_one(query=UPDATE_FACTORY_BY_IDENTIFIER, values={**updated_values, "original_identifier": exist_factory.value.identifier.upper()})
-
+            
             return self._schema_out(**dict(record))
         except Exception as e:
             raise FactoryExceptions.FactoryInvalidUpdateParamsException(e=e)
