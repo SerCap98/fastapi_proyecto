@@ -155,3 +155,43 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
         except Exception as e:
            
             raise FactoryRawMaterialInventoryExceptions.InventoryListException()
+        
+    async def get_inventory_by_fact_identifier(self, identifier: str, order: str | None, direction: str | None) -> List:
+        from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import  LIST_INVENTORY_BY_IDENTIFIER,INVENTORY_COMPLEMENTS
+
+        order = order.lower() if order else None
+        direction = direction.upper() if direction else None
+        sql_sentence = INVENTORY_COMPLEMENTS(order, direction)
+
+        values = {"identifier": identifier.upper()}
+        sql_sentence = LIST_INVENTORY_BY_IDENTIFIER + sql_sentence
+
+        try:
+            records = await self.db.fetch_all(query=sql_sentence, values=values)
+            if not records:
+                return []
+
+            return [FactoryRawMaterialInventoryList(**dict(record)) for record in records]
+
+        except Exception as e:
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+
+    async def get_inventory_by_mat_code(self, code: str, order: str | None, direction: str | None) -> List:
+        from modules.FactoryRawMaterialInventory.FactoryRawMaterialInventory_sqlstaments import  LIST_INVENTORY_BY_CODE,INVENTORY_COMPLEMENTS
+
+        order = order.lower() if order else None
+        direction = direction.upper() if direction else None
+        sql_sentence = INVENTORY_COMPLEMENTS(order, direction)
+
+        values = {"code": code.upper()}
+        sql_sentence = LIST_INVENTORY_BY_CODE + sql_sentence
+
+        try:
+            records = await self.db.fetch_all(query=sql_sentence, values=values)
+            if not records:
+                return []
+
+            return [FactoryRawMaterialInventoryList(**dict(record)) for record in records]
+
+        except Exception as e:
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)

@@ -67,6 +67,29 @@ LIST_INVENTORY = """
     LEFT JOIN factory AS fact ON fact.id = inv.id_factory
     LEFT JOIN raw_material AS raw ON raw.id = inv.id_raw_material
 """
+LIST_INVENTORY_BY_IDENTIFIER = """
+    SELECT inv.id, inv.quantity, inv.min_quantity, inv.created_by, inv.created_at, inv.updated_by, inv.updated_at,
+        us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname,
+        fact.identifier AS factory_identifier, raw.code AS raw_material_code
+    FROM factory_raw_material_inventory AS inv
+    LEFT JOIN users AS us1 ON us1.id = inv.created_by
+    LEFT JOIN users AS us2 ON us2.id = inv.updated_by
+    LEFT JOIN factory AS fact ON fact.id = inv.id_factory
+    LEFT JOIN raw_material AS raw ON raw.id = inv.id_raw_material
+    WHERE fact.identifier = :identifier 
+"""
+
+LIST_INVENTORY_BY_CODE = """
+    SELECT inv.id, inv.quantity, inv.min_quantity, inv.created_by, inv.created_at, inv.updated_by, inv.updated_at,
+        us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname,
+        fact.identifier AS factory_identifier, raw.code AS raw_material_code
+    FROM factory_raw_material_inventory AS inv
+    LEFT JOIN users AS us1 ON us1.id = inv.created_by
+    LEFT JOIN users AS us2 ON us2.id = inv.updated_by
+    LEFT JOIN factory AS fact ON fact.id = inv.id_factory
+    LEFT JOIN raw_material AS raw ON raw.id = inv.id_raw_material
+    WHERE raw.code = :code 
+"""
 
 def INVENTORY_COMPLEMENTS(order: str | None, direction: str | None):
     sql_sentence = ""

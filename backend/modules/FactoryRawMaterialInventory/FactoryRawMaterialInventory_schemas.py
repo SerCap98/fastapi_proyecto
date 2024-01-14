@@ -26,5 +26,7 @@ class FactoryRawMaterialInventoryList(BaseSchema,DateTimeModelMixin,IDModelMixin
     min_quantity: float
     quantity: float
     created_by: UUID | str |  None
+    created_by_fullname:str |  None
     updated_by: UUID | str |  None
+    updated_by_fullname:str |  None
 
