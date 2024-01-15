@@ -11,6 +11,7 @@ from modules.Formula import Formulas_router
 from modules.WarehouseProductInventory import WarehouseProductInventory_routers
 from modules.RawMaterialOrder import RawMaterialOrders_router
 from modules.OrderProduct import OrderProducts_router
+from modules.Backlog import Backlogs_router
 
 router = APIRouter()
 
@@ -26,3 +27,4 @@ router.include_router(Warehouses_router)
 router.include_router(Formulas_router)
 router.include_router(WarehouseProductInventory_routers)
 router.include_router(RawMaterialOrders_router)
+router.include_router(Backlogs_router)
