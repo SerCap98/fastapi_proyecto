@@ -16,6 +16,21 @@ GET_RAW_MATERIAL_ORDER = """
     WHERE id_raw_material = :raw_material AND id_factory = :factory;
 """
 
+UPDATE_RAW_MATERIAL_ORDER = """
+    UPDATE raw_material_order
+    SET
+        quantity = :quantity,
+        state = :state,
+        note = :note,
+        cost = :cost,
+        delivered = :delivered,
+        date_delivered = :date_delivered,
+        modified_by = :modified_by,
+        modified_at = :modified_at
+    WHERE id = :id
+    RETURNING id, id_raw_material, id_factory, quantity, state, note, cost, delivered, date_delivered, created_by, created_at;
+"""
+
 INCREASE_QUANTITY_RAW_MATERIAL_ORDER = """
     UPDATE raw_material_order
     SET quantity = quantity + :quantity,

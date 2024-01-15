@@ -66,7 +66,7 @@ class RawMaterialOrderService:
             exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
             if not exist_factory_and_raw_material.success:
                 return exist_factory_and_raw_material
-            
+
             raw_material_id=uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
             factory_id=uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
 
@@ -74,6 +74,23 @@ class RawMaterialOrderService:
             return ServiceResult(RawMaterialOrder)
         except Exception  as e:
 
+            return ServiceResult(e)
+
+    async def update_raw_material_order(self, RawMaterialOrder: RawMaterialOrder, current_user: UserInDB) -> ServiceResult:
+        RawMaterialOrder_repo = RawMaterialOrderRepository(self.db)
+
+        try:
+            exist_factory_and_raw_material = await self.exist_Factory_RawMaterial(RawMaterialOrder.factory_identifier, RawMaterialOrder.raw_material_code)
+            if not exist_factory_and_raw_material.success:
+                return exist_factory_and_raw_material
+
+            raw_material_id = uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
+            factory_id = uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
+
+            updated_RawMaterialOrder = await RawMaterialOrder_repo.update_raw_material_order(RawMaterialOrder, current_user, factory_id, raw_material_id)
+            return ServiceResult(updated_RawMaterialOrder)
+
+        except Exception as e:
             return ServiceResult(e)
 
     async def increase_quantity_by_factory_and_material(self,current_user: UserInDB,factory_identifier: str, raw_material_code: str,increase_quantity:float) -> ServiceResult:
