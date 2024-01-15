@@ -10,7 +10,7 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID
 
-state1 = sa.Enum('APPROVED', 'REFUSED', name='state1')
+state1 = sa.Enum('APPROVED', 'REFUSED','ON HOLD', name='state1')
 # revision identifiers, used by Alembic.
 revision = '548765eea08d'
 down_revision = '7ce31c7995b9'

@@ -43,9 +43,9 @@ async def get_warehouse_product_inventory_by_id(
         result = await WarehouseProductInventoryServices(db).get_warehouse_product_inventory_by_id(id)
         return handle_result(result)
     
-@router.put("/decrease-quantity-available",name="WarehouseProductInventory:decrease-quantity-available", response_model=WarehouseProductInventoryInDB,status_code=status.HTTP_200_OK)
+@router.put("/decrease-quantity-available/{id}",name="WarehouseProductInventory:decrease-quantity-available", response_model=WarehouseProductInventoryInDB,status_code=status.HTTP_200_OK)
 async def decrease_quantity_available(
-    id: UUID = Query(..., title="The id of the inventory"),
+    id: UUID = Path(..., title="The id of the inventory"),
     decrease_quantity: int = Query(..., title="The quantity to decrease"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
@@ -56,9 +56,9 @@ async def decrease_quantity_available(
             result = await WarehouseProductInventoryServices(db).decrease_quantity_available(current_user,id, decrease_quantity)
             return handle_result(result)
          
-@router.put("/transfer-inventory",name="WarehouseProductInventory:transfer-inventory", response_model=WarehouseProductInventoryInDB,status_code=status.HTTP_200_OK)
+@router.put("/transfer-inventory/{id}",name="WarehouseProductInventory:transfer-inventory", response_model=WarehouseProductInventoryInDB,status_code=status.HTTP_200_OK)
 async def transfer_inventory(
-    id: UUID = Query(..., title="The id of the inventory"),
+    id: UUID = Path(..., title="The id of the inventory"),
     new_warehouse: str = Query(..., title="The name of the new warehouse"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
@@ -69,10 +69,10 @@ async def transfer_inventory(
             result = await WarehouseProductInventoryServices(db).transfer_inventory(current_user,id, new_warehouse)
             return handle_result(result)
          
-@router.delete("/delete-inventory",name="WarehouseProductInventory:delete-inventory", response_model=dict,status_code=status.HTTP_200_OK)
+@router.delete("/delete-inventory/{id}",name="WarehouseProductInventory:delete-inventory", response_model=dict,status_code=status.HTTP_200_OK)
 
 async def delete_Inventory(
-    id: UUID = Query(..., title="The id of the inventory"),
+    id: UUID = Path(..., title="The id of the inventory"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 )-> ServiceResult:

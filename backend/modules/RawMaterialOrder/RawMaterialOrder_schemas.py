@@ -8,17 +8,20 @@ from shared.utils.schemas_base import BaseSchema, DateTimeModelMixin, IDModelMix
 class state1(Enum):
     APPROVED = "APPROVED"
     REFUSED = "REFUSED"
+    ON_HOLD = "ON HOLD"
 
 # ordenes de materia prima
 class RawMaterialOrder(BaseSchema):
     raw_material_code: str
     factory_identifier: str
     quantity: Optional[float] = None
-    state: state1
     note: Optional[str] = None
     cost: Optional[float] = None
-    delivered: Optional[bool] = None
-    date_delivered: Optional[date] = None
+
+class RawMaterialOrderToUpdated(BaseSchema):
+    quantity: Optional[float] = None
+    note: Optional[str] = None
+    cost: Optional[float] = None
 
 
 class RawMaterialOrderInDB(BaseSchema,DateTimeModelMixin,IDModelMixin):
@@ -26,11 +29,11 @@ class RawMaterialOrderInDB(BaseSchema,DateTimeModelMixin,IDModelMixin):
     id_factory: UUID
     quantity: float
     state: state1
-    note: str
+    note: str |  None
     cost: float
     delivered: bool
-    date_delivered: date
-    created_by: UUID | str |  None
+    date_delivered: date |  None
+    created_by: UUID | str 
     updated_by: UUID | str |  None
 
 class RawMaterialOrderList(BaseSchema,DateTimeModelMixin,IDModelMixin):
@@ -38,12 +41,12 @@ class RawMaterialOrderList(BaseSchema,DateTimeModelMixin,IDModelMixin):
     factory_identifier: str
     quantity: float
     state: state1
-    note: str
+    note: str |  None
     cost: float
     delivered: bool
-    date_delivered: date
-    created_by: UUID | str |  None
-    created_by_fullname:str |  None
+    date_delivered: date |  None
+    created_by: UUID | str 
+    created_by_fullname:str 
     updated_by: UUID | str |  None
     updated_by_fullname:str |  None
 

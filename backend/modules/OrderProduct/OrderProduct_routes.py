@@ -30,9 +30,9 @@ async def create_order_product(
     result = await OrderProductService(db).create_order_product(OrderProduct,current_user)
     return handle_result(result)
 
-@router.get("/get-order",name="OrderProduct:get-order-by-product", response_model=OrderProductInDB,status_code=status.HTTP_200_OK)
+@router.get("/get-order/{name}",name="OrderProduct:get-order-by-product", response_model=OrderProductInDB,status_code=status.HTTP_200_OK)
 async def get_order_by_product(
-    product_name: str = Query(..., title="The name of the product"),
+    product_name: str = Path(..., title="The name of the product"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 )-> ServiceResult:
@@ -63,9 +63,9 @@ async def get_all_order_product(
         direction=direction,)
         return handle_result(result)
 
-@router.delete("/delete-order",name="OrderProduct:delete-order", response_model=dict,status_code=status.HTTP_200_OK)
+@router.delete("/delete-order/{name}",name="OrderProduct:delete-order", response_model=dict,status_code=status.HTTP_200_OK)
 async def delete_order(
-    product_name: str = Query(..., title="The name of the product"),
+    product_name: str = Path(..., title="The name of the product"),
     db: Database = Depends(get_database),
     current_user: UserInDB = Depends(get_current_active_user)
 )-> ServiceResult:

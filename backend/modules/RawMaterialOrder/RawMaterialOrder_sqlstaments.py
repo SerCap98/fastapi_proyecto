@@ -8,49 +8,37 @@ CREATE_RAW_MATERIAL_ORDER = """
 """
 DELETE_RAW_MATERIAL_ORDER = """
     DELETE FROM raw_material_order
-    WHERE id_raw_material = :raw_material AND id_factory = :factory;
+    WHERE id = :id;
 """
 GET_RAW_MATERIAL_ORDER = """
     SELECT id, id_raw_material, id_factory, quantity, state, note, cost, delivered, date_delivered, created_by, created_at, updated_by, updated_at
     FROM raw_material_order
-    WHERE id_raw_material = :raw_material AND id_factory = :factory;
+    WHERE id = :id;
 """
 
-UPDATE_RAW_MATERIAL_ORDER = """
+UPDATED_ORDER = """
     UPDATE raw_material_order
     SET
         quantity = :quantity,
-        state = :state,
         note = :note,
         cost = :cost,
-        delivered = :delivered,
-        date_delivered = :date_delivered,
-        modified_by = :modified_by,
-        modified_at = :modified_at
+        updated_by = :updated_by,
+        updated_at = :updated_at
     WHERE id = :id
     RETURNING id, id_raw_material, id_factory, quantity, state, note, cost, delivered, date_delivered, created_by, created_at;
 """
 
-INCREASE_QUANTITY_RAW_MATERIAL_ORDER = """
+SET_DELIVERED_RAW_MATERIAL_ORDER = """
     UPDATE raw_material_order
-    SET quantity = quantity + :quantity,
+    SET delivered = :delivered,
+        date_delivered= :date_delivered,
         updated_at = :updated_at,
         updated_by = :updated_by
-    WHERE id_raw_material = :raw_material AND id_factory = :factory
+    WHERE id = :id 
     RETURNING id, id_raw_material, id_factory, quantity, state, note, cost, delivered, date_delivered, created_by, created_at, updated_by, updated_at;
 """
 
-DECREASE_QUANTITY_RAW_MATERIAL_ORDER = """
-    UPDATE raw_material_order
-    SET quantity = CASE
-                       WHEN quantity - :quantity < 0 THEN 0
-                       ELSE quantity - :quantity
-                   END,
-        updated_at = :updated_at,
-        updated_by = :updated_by
-    WHERE id_raw_material = :raw_material AND id_factory = :factory
-    RETURNING id, id_raw_material, id_factory, quantity, state, note, cost, delivered, date_delivered, created_by, created_at, updated_by, updated_at;
-"""
+
 
 LIST_RAW_MATERIAL_ORDER = """
     SELECT rmo.id, rmo.id_raw_material, rmo.id_factory, rmo.quantity, rmo.state, rmo.note, rmo.cost, rmo.delivered, rmo.date_delivered, rmo.created_by, rmo.created_at, rmo.updated_by, rmo.updated_at,
@@ -67,16 +55,16 @@ LIST_RAW_MATERIAL_ORDER = """
 def RAW_MATERIAL_ORDER_COMPLEMENTS(order: str | None, direction: str | None):
     sql_sentence = ""
     if not order and not direction:
-        sql_sentence = " ORDER BY rmo.quantity ASC;"
-    elif order == "quantity" and direction == "DESC":
-        sql_sentence = " ORDER BY rmo.quantity DESC;"
-    elif order == "quantity" and (direction == "ASC" or direction == None):
-        sql_sentence = " ORDER BY rmo.quantity ASC;"
+        sql_sentence = " ORDER BY rmo.cost ASC;"
+    elif order == "cost" and direction == "DESC":
+        sql_sentence = " ORDER BY rmo.cost DESC;"
+    elif order == "cost" and (direction == "ASC" or direction == None):
+        sql_sentence = " ORDER BY rmo.cost ASC;"
 
 
     return sql_sentence
 
 
 def RAW_MATERIAL_ORDER_SEARCH():
-    return """ WHERE (raw.code ILIKE :search OR fact.identifier ILIKE :search or rmo.state::text ILIKE :search) """
+    return """ WHERE (raw.code ILIKE :search OR fact.identifier ILIKE :search or rmo.state::text ILIKE :search OR rmo.delivered ILIKE :search) """
 
