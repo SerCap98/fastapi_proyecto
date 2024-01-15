@@ -156,45 +156,7 @@ class FormulaService:
         except Exception as e:
             return ServiceResult(e)
 
-    async def get_formula_by_name(self,
-            name: str,
-            page_num: int = 1,
-            page_size: int = 10,
-            order: str = None,
-            direction: str = None,
-        ) -> ServiceResult:
-            try:
-                formula = await FormulaRepository(self.db).get_formula_by_name(name, order, direction)
-                formula_list = [FormulaList(**item.dict()) for item in formula]
-                response = short_pagination(
-                    page_num=page_num,
-                    page_size=page_size,
-                    data_list=formula_list,
-                    route=f"{API_PREFIX}/formula/by-name/{name}",
-                )
-                return ServiceResult(response)
-            except Exception as e:
-                return ServiceResult(e)
 
-    async def get_formula_by_mat_code(self,
-            code: str,
-            page_num: int = 1,
-            page_size: int = 10,
-            order: str = None,
-            direction: str = None,
-        ) -> ServiceResult:
-            try:
-                formula = await FormulaRepository(self.db).get_formula_by_mat_code(code, order, direction)
-                formula_list = [FormulaList(**item.dict()) for item in formula]
-                response = short_pagination(
-                    page_num=page_num,
-                    page_size=page_size,
-                    data_list=formula_list,
-                    route=f"{API_PREFIX}formula/by-code/{code}",
-                )
-                return ServiceResult(response)
-            except Exception as e:
-                return ServiceResult(e)
 
     async def get_all_formula(self, search: str | None, page_num: int = 1, page_size: int = 10, order: str = None, direction: str = None, ) -> ServiceResult:
             try:

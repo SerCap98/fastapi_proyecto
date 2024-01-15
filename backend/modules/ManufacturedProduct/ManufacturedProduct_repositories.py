@@ -45,7 +45,7 @@ class ManufacturedProductRepository(BaseRepository):
             record = await self.db.fetch_one(query=CREATE_MANUFACTURED_PRODUCT , values=values)
 
         except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductException(e)
+            raise ManufacturedProductExceptions.ManufacturedProductInvalidCreateParamsException(e)
 
         result = record_to_dict(record)
         return self._schema_out(**result)
@@ -77,7 +77,7 @@ class ManufacturedProductRepository(BaseRepository):
             return [ManufacturedProductList(**dict(record)) for record in records]
 
         except Exception as e:
-            raise ManufacturedProductExceptions.ManufacturedProductException()
+            raise ManufacturedProductExceptions.ManufacturedProductListException()
 
     async def get_manufactured_product_by_id(self, id: UUID) -> UserInDB | dict:
         from modules.ManufacturedProduct.ManufacturedProduct_sqlstaments import GET_MANUFACTURED_PRODUCT_BY_ID

@@ -47,7 +47,7 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
             record = await self.db.fetch_one(query=CREATE_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
 
         except Exception as e:
-            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialInvalidCreateParamsException(e)
 
         result = record_to_dict(record)
         return self._schema_out(**result)
@@ -78,7 +78,7 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
 
             record = await self.db.fetch_one(query=INCREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
         except Exception as e:
-            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialInvalidUpdateParamsException(e)
         
         result=self._schema_out(**dict(record))
         return result
@@ -97,7 +97,7 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
 
             record = await self.db.fetch_one(query=DECREASE_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
         except Exception as e:
-            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialInvalidUpdateParamsException(e)
         result=self._schema_out(**dict(record))
         event = InventoryUpdatedEvent(result.id, result.quantity, result.min_quantity,current_user)
         await EventBus.publish(event)
@@ -117,7 +117,7 @@ class FactoryRawMaterialInventoryRepository(BaseRepository):
 
             record = await self.db.fetch_one(query=UPDATE_MIN_QUANTITY_FACTORY_RAW_MATERIAL_INVENTORY , values=values)
         except Exception as e:
-            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialException(e)
+            raise FactoryRawMaterialInventoryExceptions.FactoryRawMaterialInvalidUpdateParamsException(e)
         return self._schema_out(**dict(record))
     
     async def delete_inventory_by_Factory_and_RawMaterial(self,raw_material:UUID ,factory:UUID) -> bool:

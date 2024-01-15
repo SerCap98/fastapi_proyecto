@@ -20,11 +20,6 @@ class RawMaterialExceptions:
             msg = "Error eliminando materia prima"
             AppExceptionCase.__init__(self, status_code, msg)
 
-    class RawMaterialSearchException(AppExceptionCase):
-        def __init__(self, msg: str = ""):
-            status_code = 500
-            msg = "Error buscando materia prima"
-            AppExceptionCase.__init__(self, status_code, msg)
 
     class RawMaterialNotFoundException(AppExceptionCase):
         def __init__(self, msg: str = ""):
@@ -49,8 +44,3 @@ class RawMaterialExceptions:
             msg = "No se pudo recuperar la lista de materias primas"
             AppExceptionCase.__init__(self, status_code, msg)
 
-    class RawMaterialInvalidUUIDException(AppExceptionCase):
-        def __init__(self, msg: str = ""):
-            status_code = 422
-            msg = "UUID Invalido"
-            AppExceptionCase.__init__(self, status_code, msg)

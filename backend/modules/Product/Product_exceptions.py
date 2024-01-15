@@ -49,8 +49,4 @@ class ProductExceptions:
             msg = "No se pudo recuperar la lista de productos"
             AppExceptionCase.__init__(self, status_code, msg)
 
-    class ProductInvalidUUIDException(AppExceptionCase):
-        def __init__(self, msg: str = ""):
-            status_code = 422
-            msg = "UUID Invalido"
-            AppExceptionCase.__init__(self, status_code, msg)
+

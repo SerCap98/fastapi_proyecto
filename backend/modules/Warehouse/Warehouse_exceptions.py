@@ -49,8 +49,3 @@ class WarehouseExceptions:
             msg = "No se pudo recuperar la lista de almacenes"
             AppExceptionCase.__init__(self, status_code, msg)
 
-    class WarehouseInvalidUUIDException(AppExceptionCase):
-        def __init__(self, msg: str = ""):
-            status_code = 422
-            msg = "UUID Invalido"
-            AppExceptionCase.__init__(self, status_code, msg)

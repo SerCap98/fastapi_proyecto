@@ -20,26 +20,6 @@ LIST_MANUFACTURED_PRODUCT = """
     LEFT JOIN users AS us2 ON us2.id = mp.updated_by
     LEFT JOIN product AS prod ON prod.id = mp.id_product
 """
-LIST_MANUFACTURED_PRODUCT_BY_NAME = """
-    SELECT mp.id, mp.lot_number, mp.quantity, mp.created_by, mp.created_at, mp.updated_by, mp.updated_at,
-        us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname,
-        prod.name AS product_name
-    FROM manufactured_product AS mp
-    LEFT JOIN users AS us1 ON us1.id = mp.created_by
-    LEFT JOIN users AS us2 ON us2.id = mp.updated_by
-    LEFT JOIN product AS prod ON prod.id = mp.id_product
-    WHERE prod.name = :name  
-"""
-LIST_MANUFACTURED_PRODUCT_BY_LOT_NUMBER = """
-    SELECT mp.id, mp.lot_number, mp.quantity, mp.created_by, mp.created_at, mp.updated_by, mp.updated_at,
-        us1.fullname AS created_by_fullname, us2.fullname AS updated_by_fullname,
-        prod.name AS product_name
-    FROM manufactured_product AS mp
-    LEFT JOIN users AS us1 ON us1.id = mp.created_by
-    LEFT JOIN users AS us2 ON us2.id = mp.updated_by
-    LEFT JOIN product AS prod ON prod.id = mp.id_product
-    WHERE mp.lot_number = :lot_number  
-"""
 
 DELETE_MANUFACTURED_PRODUCT_BY_ID = """
     DELETE from manufactured_product

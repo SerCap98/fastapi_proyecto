@@ -45,7 +45,7 @@ class FormulaRepository(BaseRepository):
             record = await self.db.fetch_one(query=CREATE_FORMULA, values=values)
 
         except Exception as e:
-            raise FormulaExceptions.FormulaException(e)
+            raise FormulaExceptions.FormulaCreateParamsException(e)
 
         result = record_to_dict(record)
         return self._schema_out(**result)
@@ -76,7 +76,7 @@ class FormulaRepository(BaseRepository):
 
             record = await self.db.fetch_one(query=INCREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA , values=values)
         except Exception as e:
-            raise FormulaExceptions.FormulaException(e)
+            raise FormulaExceptions.FormulaUpdateParamsException(e)
 
         result=self._schema_out(**dict(record))
         return result
@@ -95,7 +95,7 @@ class FormulaRepository(BaseRepository):
 
             record = await self.db.fetch_one(query=DECREASE_QUANTITY_RAW_MATERIAL_PRODUCT_FORMULA , values=values)
         except Exception as e:
-            raise FormulaExceptions.FormulaException(e)
+            raise FormulaExceptions.FormulaUpdateParamsException(e)
         result=self._schema_out(**dict(record))
         event = FormulaUpdatedEvent(result.id, result.quantity, current_user)
         await EventBus.publish(event)
@@ -111,7 +111,7 @@ class FormulaRepository(BaseRepository):
 
             record = await self.db.fetch_one(query=DELETE_RAW_MATERIAL_PRODUCT_FORMULA, values=values)
         except Exception as e:
-            raise FormulaExceptions.FormulaException()
+            raise FormulaExceptions.FormulaDeleteException()
         return True
 
     async def delete_formula_by_product(self, product: UUID) -> bool:
@@ -120,48 +120,12 @@ class FormulaRepository(BaseRepository):
             values = {"product": product}
             record = await self.db.execute(query=DELETE_PRODUCT_FORMULA, values=values)
         except Exception as e:
-            raise FormulaExceptions.FormulaException()
+            raise FormulaExceptions.FormulaDeleteException()
         return True
 
-    async def get_formula_by_name(self, name: str, order: str | None, direction: str | None) -> List:
-        from modules.Formula.Formula_sqlstaments import LIST_FORMULA_BY_PRODUCT, FORMULA_COMPLEMENTS
 
-        order = order.lower() if order else None
-        direction = direction.upper() if direction else None
-        sql_sentence = FORMULA_COMPLEMENTS(order, direction)
 
-        values = {"name": name}
-        sql_sentence = LIST_FORMULA_BY_PRODUCT + sql_sentence
 
-        try:
-            records = await self.db.fetch_all(query=sql_sentence, values=values)
-            if not records:
-                return []
-
-            return [FormulaList(**dict(record)) for record in records]
-
-        except Exception as e:
-            raise FormulaExceptions.FormulaException()
-
-    async def get_formula_by_mat_code(self, code: str, order: str | None, direction: str | None) -> List:
-        from modules.Formula.Formula_sqlstaments import  LIST_FORMULA_BY_MATERIAL,FORMULA_COMPLEMENTS
-
-        order = order.lower() if order else None
-        direction = direction.upper() if direction else None
-        sql_sentence = FORMULA_COMPLEMENTS(order, direction)
-
-        values = {"code": code.upper()}
-        sql_sentence = LIST_FORMULA_BY_MATERIAL + sql_sentence
-
-        try:
-            records = await self.db.fetch_all(query=sql_sentence, values=values)
-            if not records:
-                return []
-
-            return [FormulaList(**dict(record)) for record in records]
-
-        except Exception as e:
-            raise FormulaExceptions.FormulaException(e)
 
     async def get_all_formula(self, search: str | None, order: str | None, direction: str | None ) -> List:
         from modules.Formula.Formula_sqlstaments import LIST_FORMULA,FORMULA_COMPLEMENTS,FORMULA_SEARCH

@@ -27,3 +27,26 @@ class FormulaExceptions:
             status_code = 500
             msg = "Could not retrieve list"
             AppExceptionCase.__init__(self, status_code, msg)
+
+    class FormulaUpdateParamsException(AppExceptionCase):
+        def __init__(self, msg: str = "", e: Any = None):
+            status_code = 422
+            msg = str(e)
+            AppExceptionCase.__init__(self, status_code, msg)
+    class FormulaCreateParamsException(AppExceptionCase):
+        def __init__(self, msg: str = "", e: Any = None):
+            status_code = 422
+            msg = str(e)
+            AppExceptionCase.__init__(self, status_code, msg)
+
+    class FormulaCreationException(AppExceptionCase):
+        def __init__(self, msg: str = ""):
+            status_code = 500
+            msg = "Error creating record"
+            AppExceptionCase.__init__(self, status_code, msg)
+
+    class FormulaUpdateException(AppExceptionCase):
+        def __init__(self, msg: str = ""):
+            status_code = 500
+            msg = "Error updating record"
+            AppExceptionCase.__init__(self, status_code, msg)            

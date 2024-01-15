@@ -97,7 +97,7 @@ class AlertRepository(BaseRepository):
         try:
             await self.db.execute(query=DELETE_ALERT_BY_ID, values={"id": id})
         except Exception as e:
-            raise AlertExceptions.AlertNotFoundException()
+            raise AlertExceptions.AlertDeleteException()
         return True
 
 
