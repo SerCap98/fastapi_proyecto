@@ -24,13 +24,14 @@ def create_factory_raw_material_inventory_table():
         sa.Column("id", UUID(as_uuid=True), primary_key=True, default=uuid4),
         sa.Column("id_factory", UUID(as_uuid=True), sa.ForeignKey("factory.id"), nullable=False),
         sa.Column("id_raw_material", UUID(as_uuid=True), sa.ForeignKey("raw_material.id"), nullable=False),
-        sa.Column("min_quantity", sa.Float, nullable=False,check_constraint="quantity >= 0"),
+        sa.Column("min_quantity", sa.Float, nullable=False),
         sa.Column("quantity", sa.Float, nullable=False),
         sa.Column("created_by", UUID(as_uuid=True), nullable=False),
         sa.Column("created_at", sa.DateTime, nullable=False),
         sa.Column("updated_by", UUID(as_uuid=True), nullable=True),
         sa.Column("updated_at", sa.DateTime, nullable=True),
-        sa.UniqueConstraint("id_factory", "id_raw_material", name="uq_factory_raw_material")
+        sa.UniqueConstraint("id_factory", "id_raw_material", name="uq_factory_raw_material"),
+        sa.CheckConstraint("quantity >= 0", name='quantity_positive_check')
     )
 
 def upgrade() -> None:
