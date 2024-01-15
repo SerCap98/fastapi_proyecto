@@ -1,4 +1,4 @@
-#from shared.utils.events import EventBus, OrderUpdatedEvent
+from shared.utils.events import EventBus, OrderUpdatedEvent
 from shared.core.config import API_PREFIX
 from shared.utils.short_pagination import short_pagination
 from modules.users.users.user_schemas import UserInDB
@@ -16,7 +16,7 @@ from uuid import UUID
 class BacklogService:
     def __init__(self, db: Database):
         self.db = db
-        #EventBus.subscribe(OrderUpdatedEvent, self.handle_order_update)
+        EventBus.subscribe(OrderUpdatedEvent, self.handle_order_update)
 
 
     async def create_backlog(self, backlog: Backlog,current_user: UserInDB) -> ServiceResult:
@@ -90,12 +90,10 @@ class BacklogService:
 
                 return ServiceResult(e)
 
-    """ async def handle_order_update(self, event: OrderUpdatedEvent):
-        if event.new_quantity < event.min_quantity:
-
+    async def handle_order_update(self, event: OrderUpdatedEvent):
             backlog = Backlog(
                 id_order_product=event.order_product_id,
                 state=BacklogState.PENDING,
                 description="Pedido pendiente"
             )
-            await self.create_backlog(backlog, event.current_user) """
+            await self.create_backlog(backlog, event.current_user)
