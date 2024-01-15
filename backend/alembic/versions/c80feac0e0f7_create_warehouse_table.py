@@ -23,7 +23,7 @@ def create_warehouse_table():
     op.create_table(
         "warehouse",
         sa.Column("id", UUID, primary_key=True, default=uuid4()),
-        sa.Column("name", sa.Text, nullable=False),
+        sa.Column("name", sa.Text, nullable=False,unique=True),
         sa.Column("type", type1, nullable=False),
         sa.Column("type_num", sa.Integer, nullable=False),        
         sa.Column("created_by", UUID(as_uuid=True), nullable=False),

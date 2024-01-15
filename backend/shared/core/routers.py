@@ -8,7 +8,7 @@ from modules.FactoryRawMaterialInventory import FactoryRawMaterialsInventory_rou
 from modules.Alert import alerts_router
 from modules.Warehouse import Warehouses_router
 from modules.Formula import Formulas_router
-
+from modules.WarehouseProductInventory import WarehouseProductInventory_routers
 
 router = APIRouter()
 
@@ -21,3 +21,4 @@ router.include_router(FactoryRawMaterialsInventory_router)
 router.include_router(alerts_router)
 router.include_router(Warehouses_router)
 router.include_router(Formulas_router)
+router.include_router(WarehouseProductInventory_routers)

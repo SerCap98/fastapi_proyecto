@@ -22,7 +22,7 @@ def create_warehouse_product_inventory_table():
         "warehouse_product_inventory",
         sa.Column("id", UUID, primary_key=True, default=uuid4()),
         sa.Column("id_warehouse", UUID, sa.ForeignKey("warehouse.id"), nullable=False),
-        sa.Column("id_manufactured_product", UUID, sa.ForeignKey("manufactured_product.id"), nullable=False),
+        sa.Column("id_manufactured_product", UUID, sa.ForeignKey("manufactured_product.id"), nullable=False,unique=True),
         sa.Column("available_product", sa.Integer, nullable=False),
         sa.Column("created_by", UUID(as_uuid=True), nullable=False),
         sa.Column("created_at", sa.DateTime, nullable=False),

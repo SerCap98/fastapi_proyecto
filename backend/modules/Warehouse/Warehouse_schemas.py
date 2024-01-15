@@ -12,7 +12,7 @@ class type1(Enum):
 # Warehouse
 class Warehouse(BaseSchema):
     name: Optional[str] = None
-    type: type1
+    type: Optional[type1] = None
     type_num: Optional[int] = None
 
 class WarehouseInDB(BaseSchema,DateTimeModelMixin,IDModelMixin):
