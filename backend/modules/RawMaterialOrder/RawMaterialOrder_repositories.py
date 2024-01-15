@@ -23,27 +23,28 @@ class RawMaterialOrderRepository(BaseRepository):
     def _schema_out(self) -> Type[RawMaterialOrderInDB]:
         return RawMaterialOrderInDB
 
-    async def  update_raw_material_order  (self, RawMaterialOrder: RawMaterialOrder, current_user: UserInDB, factory: UUID, raw_material: UUID) -> RawMaterialOrderInDB  :
-        from modules.RawMaterialOrder.RawMaterialOrder_sqlstaments import  UPDATE_RAW_MATERIAL_ORDER
+    async def create_raw_material_order(self, RawMaterialOrder: RawMaterialOrder,current_user: UserInDB,factory:UUID,raw_material:UUID ) -> RawMaterialOrderInDB:
+        from modules.RawMaterialOrder.RawMaterialOrder_sqlstaments import CREATE_RAW_MATERIAL_ORDER
 
+        RawMaterialOrder_id = str(uuid.uuid4())
         current_time = datetime.now()
 
         values = {
-            "id":  RawMaterialOrder.id  ,
-            "raw_material": raw_material  ,
-            "factory": factory  ,
-            "quantity": RawMaterialOrder.quantity if  RawMaterialOrder.quantity else None,
-            "state": RawMaterialOrder.state.name if  RawMaterialOrder.state else None,
-            "note": RawMaterialOrder.note.upper() if  RawMaterialOrder.note else None,
-            "cost": RawMaterialOrder.cost if  RawMaterialOrder.cost else None,
-            "delivered": RawMaterialOrder.delivered if  RawMaterialOrder.delivered else None,
-            "date_delivered": RawMaterialOrder.date_delivered if  RawMaterialOrder.date_delivered else None,
-            "modified_by": current_user.id  ,
-            "modified_at": current_time
-        }
+            "id": RawMaterialOrder_id ,
+            "raw_material": raw_material,
+            "factory": factory,
+            "quantity":RawMaterialOrder.quantity if RawMaterialOrder.quantity else None,
+            "state":RawMaterialOrder.state.name if RawMaterialOrder.state else None,
+            "note":RawMaterialOrder.note.upper() if RawMaterialOrder.note else None,
+            "cost":RawMaterialOrder.cost if RawMaterialOrder.cost else None,
+            "delivered":RawMaterialOrder.delivered if RawMaterialOrder.delivered else None,
+            "date_delivered":RawMaterialOrder.date_delivered if RawMaterialOrder.date_delivered else None,
+            "created_by": current_user.id,
+            "created_at": current_time
+            }
 
         try:
-            record = await self.db.fetch_one(query= UPDATE_RAW_MATERIAL_ORDER, values=values)
+            record = await self.db.fetch_one(query=CREATE_RAW_MATERIAL_ORDER , values=values)
 
         except Exception as e:
             raise RawMaterialOrderExceptions.RawMaterialOrderException(e)
