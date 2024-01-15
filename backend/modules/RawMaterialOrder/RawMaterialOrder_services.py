@@ -60,6 +60,36 @@ class RawMaterialOrderService:
 
                 return ServiceResult(e)
 
+    async def increase_quantity_by_factory_and_material(self,current_user: UserInDB,factory_identifier: str, raw_material_code: str,increase_quantity:float) -> ServiceResult:
+        try:
+
+            exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
+            if not exist_factory_and_raw_material.success:
+                return exist_factory_and_raw_material
+
+            raw_material_id=uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
+            factory_id=uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
+
+            RawMaterialOrder = await RawMaterialOrderRepository(self.db).increase_quantity_by_factory_and_material(current_user,raw_material_id,factory_id,increase_quantity)
+            return ServiceResult(RawMaterialOrder)
+        except Exception  as e:
+            return ServiceResult(e)
+
+    async def decrease_quantity_by_factory_and_material(self,current_user: UserInDB,factory_identifier: str, raw_material_code: str,decrease_quantity:float) -> ServiceResult:
+        try:
+
+            exist_factory_and_raw_material=await self.exist_Factory_RawMaterial(factory_identifier,raw_material_code)
+            if not exist_factory_and_raw_material.success:
+                return exist_factory_and_raw_material
+
+            raw_material_id=uuid.UUID(str(exist_factory_and_raw_material.value["raw_material_id"]))
+            factory_id=uuid.UUID(str(exist_factory_and_raw_material.value["factory_id"]))
+
+            RawMaterialOrder = await RawMaterialOrderRepository(self.db).decrease_quantity_by_factory_and_material(current_user,raw_material_id,factory_id,decrease_quantity)
+            return ServiceResult(RawMaterialOrder)
+        except Exception  as e:
+            return ServiceResult(e)
+
     async def delete_order_by_Factory_and_RawMaterial(self, factory_identifier: str, raw_material_code: str) -> ServiceResult:
         try:
 

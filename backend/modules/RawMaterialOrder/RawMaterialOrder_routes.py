@@ -52,6 +52,34 @@ async def get_all_order(
         direction=direction,)
         return handle_result(result)
 
+@router.put("/increase-quantity",name="RawMaterialOrder:increase-quantity-order-by-factory-and-material", response_model=RawMaterialOrderInDB,status_code=status.HTTP_200_OK)
+async def increase_quantity(
+    raw_material_code: str = Query(..., title="The code of the raw material"),
+    factory_identifier: str = Query(..., title="The identifier of the factory"),
+    increase_quantity: float= Query(..., title="The amount to increase"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+         if not is_authorized(current_user, "RawMaterialOrder:increase-quantity-order-by-factory-and-material"):
+            return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+         else :
+            result = await RawMaterialOrderService(db).increase_quantity_by_factory_and_material(current_user,factory_identifier, raw_material_code,increase_quantity)
+            return handle_result(result)
+
+@router.put("/decrease-quantity",name="RawMaterialOrder:decrease-quantity-order-by-factory-and-material", response_model=RawMaterialOrderInDB,status_code=status.HTTP_200_OK)
+async def decrease_quantity(
+    raw_material_code: str = Query(..., title="The code of the raw material"),
+    factory_identifier: str = Query(..., title="The identifier of the factory"),
+    decrease_quantity: float= Query(..., title="The amount to decrease"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+) -> ServiceResult:
+         if not is_authorized(current_user, "RawMaterialOrder:decrease-quantity-order-by-factory-and-material"):
+            return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+         else :
+            result = await RawMaterialOrderService(db).decrease_quantity_by_factory_and_material(current_user,factory_identifier, raw_material_code,decrease_quantity)
+            return handle_result(result)
+
 @router.delete("/delete-order",name="RawMaterialOrder:delete-order-by-factory-and-material", response_model=dict,status_code=status.HTTP_200_OK)
 async def delete_order_by_Factory_and_RawMaterial(
     factory_identifier: str = Query(..., title="The identifier of the factory"),

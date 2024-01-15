@@ -2,7 +2,6 @@ from datetime import datetime
 from typing import List, Type
 from uuid import UUID
 import uuid
-from shared.utils.events import EventBus, InventoryUpdatedEvent
 from shared.utils.service_result import ServiceResult
 from modules.users.users.user_schemas import UserInDB
 from shared.utils.record_to_dict import record_to_dict
@@ -80,6 +79,44 @@ class RawMaterialOrderRepository(BaseRepository):
         except Exception as e:
 
             raise RawMaterialOrderExceptions.RawMaterialOrderException()
+
+    async def increase_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,increase_quantity:float) -> RawMaterialOrderInDB:
+        from modules.RawMaterialOrder.RawMaterialOrder_sqlstaments import INCREASE_QUANTITY_RAW_MATERIAL_ORDER
+        current_time = datetime.now()
+        try:
+            values = {
+                "raw_material": raw_material,
+                "factory": factory ,
+                "quantity":increase_quantity,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=INCREASE_QUANTITY_RAW_MATERIAL_ORDER , values=values)
+        except Exception as e:
+            raise RawMaterialOrderExceptions.RawMaterialOrderInvalidUpdateParamsException(e)
+
+        result=self._schema_out(**dict(record))
+        return result
+
+    async def decrease_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,decrease_quantity:float) -> RawMaterialOrderInDB:
+        from modules.RawMaterialOrder.RawMaterialOrder_sqlstaments import DECREASE_QUANTITY_RAW_MATERIAL_ORDER
+        current_time = datetime.now()
+        try:
+            values = {
+                "raw_material": raw_material,
+                "factory": factory ,
+                "quantity":decrease_quantity,
+                "updated_by": current_user.id,
+                "updated_at": current_time
+                }
+
+            record = await self.db.fetch_one(query=DECREASE_QUANTITY_RAW_MATERIAL_ORDER , values=values)
+        except Exception as e:
+            raise RawMaterialOrderExceptions.RawMaterialOrderInvalidUpdateParamsException(e)
+
+        result=self._schema_out(**dict(record))
+        return result
 
     async def delete_order_by_Factory_and_RawMaterial(self,raw_material:UUID ,factory:UUID) -> bool:
         from modules.RawMaterialOrder.RawMaterialOrder_sqlstaments import DELETE_RAW_MATERIAL_ORDER
