@@ -42,8 +42,9 @@ class OrderProductRepository(BaseRepository):
              }
       
         try:
-            print(values)
+          
             record = await self.db.fetch_one(query=CREATE_ORDER_PRODUCT , values=values)
+            print(record)
 
         except Exception as e:
             raise OrderProductExceptions.OrderProductInvalidCreateParamsException(e)
