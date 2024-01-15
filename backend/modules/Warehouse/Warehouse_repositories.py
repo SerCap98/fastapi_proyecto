@@ -54,15 +54,15 @@ class WarehouseRepository(BaseRepository):
 
     async def update_warehouse_by_name(self, exist_warehouse: ServiceResult, warehouse_update: Warehouse,current_user: UserInDB) -> WarehouseInDB:
         from modules.Warehouse.Warehouse_sqlstaments import UPDATE_WAREHOUSE_BY_NAME
-
         updated_values = {
             "name": warehouse_update.name.upper() if warehouse_update.name else exist_warehouse.value.name,
-            "type": warehouse_update.type.name if warehouse_update.type else exist_warehouse.type,
+            "type": warehouse_update.type.name if warehouse_update.type else exist_warehouse.value.type.value,
             "type_num": warehouse_update.type_num if warehouse_update.type_num else exist_warehouse.value.type_num,
             "updated_by": current_user.id,
             "updated_at": datetime.now()
         }
         try:
+        
             record = await self.db.fetch_one(query=UPDATE_WAREHOUSE_BY_NAME, values={**updated_values, "original_name": exist_warehouse.value.name.upper()})
 
             return self._schema_out(**dict(record))
