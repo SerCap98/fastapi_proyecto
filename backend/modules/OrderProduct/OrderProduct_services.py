@@ -49,6 +49,21 @@ class OrderProductService:
 
             return ServiceResult(e)
 
+    async def delete_order(self, product_name: str) -> ServiceResult:
+        try:
+
+            exist_product=await self.exist_Product(product_name)
+            if not exist_product.success:
+                return exist_product
+
+            product_id=uuid.UUID(str(exist_product.value["product_id"]))
+
+            await OrderProductRepository(self.db).delete_order(product_id,product_id)
+            return ServiceResult({"message": "Record deleted successfully"})
+        except Exception  as e:
+
+            return ServiceResult(e)
+
     async def exist_Product(self, product_name: str) -> ServiceResult:
         Product_services=ProductService(self.db)
 

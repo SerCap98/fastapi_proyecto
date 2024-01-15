@@ -88,3 +88,15 @@ class OrderProductRepository(BaseRepository):
 
         except Exception as e:
             raise OrderProductExceptions.ManufacturedProductListException()
+
+    async def delete_order(self,product:UUID) -> bool:
+        from modules.OrderProduct.OrderProduct_sqlstaments import DELETE_ORDER_PRODUCT
+        try:
+            values = {
+                "product": product
+                }
+
+            record = await self.db.fetch_one(query=DELETE_ORDER_PRODUCT, values=values)
+        except Exception as e:
+            raise OrderProductExceptions.OrderProductDeleteException()
+        return True

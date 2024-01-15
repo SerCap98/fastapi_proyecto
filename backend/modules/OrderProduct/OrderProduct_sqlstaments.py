@@ -21,10 +21,9 @@ LIST_ORDER_PRODUCT = """
     LEFT JOIN product AS prod ON prod.id = op.id_product
 """
 
-DELETE_ORDER_PRODUCT_BY_ID = """
-    DELETE from order_product
-    WHERE id = :id
-    RETURNING id
+DELETE_ORDER_PRODUCT = """
+    DELETE FROM order_product
+    WHERE id_product = :product ;
 """
 
 def ORDER_PRODUCT_COMPLEMENTS(order: str | None, direction: str | None):

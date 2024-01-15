@@ -62,3 +62,15 @@ async def get_all_order_product(
         order=order,
         direction=direction,)
         return handle_result(result)
+
+@router.delete("/delete-order",name="OrderProduct:delete-order", response_model=dict,status_code=status.HTTP_200_OK)
+async def delete_order(
+    product_name: str = Query(..., title="The name of the product"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+)-> ServiceResult:
+    if not is_authorized(current_user, "OrderProduct:delete-order"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else :
+        result = await OrderProductService(db).delete_order(product_name)
+        return handle_result(result)
