@@ -53,18 +53,20 @@ LIST_RAW_MATERIAL_ORDER = """
 
 
 def RAW_MATERIAL_ORDER_COMPLEMENTS(order: str | None, direction: str | None):
-    sql_sentence = ""
-    if not order and not direction:
-        sql_sentence = " ORDER BY rmo.cost ASC;"
-    elif order == "cost" and direction == "DESC":
-        sql_sentence = " ORDER BY rmo.cost DESC;"
-    elif order == "cost" and (direction == "ASC" or direction == None):
-        sql_sentence = " ORDER BY rmo.cost ASC;"
+    if not order:
+        order = "created_at"  # Default ordering field
+    if direction not in ["ASC", "DESC"]:
+        direction = "ASC"  # Default direction
 
+    # Validate order field
+    if order in ["cost", "created_at"]:
+        sql_sentence = f" ORDER BY rmo.{order} {direction}"
+    else:
+        sql_sentence = " ORDER BY rmo.created_at ASC"  # Fallback default
 
     return sql_sentence
 
 
 def RAW_MATERIAL_ORDER_SEARCH():
-    return """ WHERE (raw.code ILIKE :search OR fact.identifier ILIKE :search or rmo.state::text ILIKE :search OR rmo.delivered ILIKE :search) """
+    return """ WHERE (raw.code ILIKE :search OR fact.identifier ILIKE :search or rmo.state::text ILIKE :search OR rmo.delivered::text ILIKE :search OR rmo.created_at::text ILIKE :search) """
 
