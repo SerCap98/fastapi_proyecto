@@ -52,6 +52,19 @@ async def get_all_order(
         direction=direction,)
         return handle_result(result)
 
+@router.get("/get-order",name="RawMaterialOrder:get-order-by-Factory-and-material", response_model=RawMaterialOrderInDB,status_code=status.HTTP_200_OK)
+async def get_order_by_Factory_and_material(
+    raw_material_code: str = Query(..., title="The code of the raw material"),
+    factory_identifier: str = Query(..., title="The identifier of the factory"),
+    db: Database = Depends(get_database),
+    current_user: UserInDB = Depends(get_current_active_user)
+)-> ServiceResult:
+    if not is_authorized(current_user, "RawMaterialOrder:get-order-by-Factory-and-material"):
+        return handle_result(ServiceResult(AuthExceptions.AuthUnauthorizedException()))
+    else :
+        result = await RawMaterialOrderService(db).get_order_by_Factory_and_material(factory_identifier, raw_material_code)
+        return handle_result(result)
+
 @router.put("/increase-quantity",name="RawMaterialOrder:increase-quantity-order-by-factory-and-material", response_model=RawMaterialOrderInDB,status_code=status.HTTP_200_OK)
 async def increase_quantity(
     raw_material_code: str = Query(..., title="The code of the raw material"),

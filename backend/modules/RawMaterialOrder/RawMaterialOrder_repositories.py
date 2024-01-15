@@ -80,6 +80,18 @@ class RawMaterialOrderRepository(BaseRepository):
 
             raise RawMaterialOrderExceptions.RawMaterialOrderException()
 
+    async def get_order_by_Factory_and_material(self,raw_material:UUID ,factory:UUID) -> RawMaterialOrderInDB:
+        from modules.RawMaterialOrder.RawMaterialOrder_sqlstaments import GET_RAW_MATERIAL_ORDER
+        values = {
+            "raw_material": raw_material,
+            "factory": factory
+            }
+
+        record = await self.db.fetch_one(query=GET_RAW_MATERIAL_ORDER, values=values)
+        if not record:
+            raise RawMaterialOrderExceptions.RawMaterialOrderNotFoundException()
+        return self._schema_out(**dict(record))
+
     async def increase_quantity_by_factory_and_material(self,current_user: UserInDB,raw_material:UUID ,factory:UUID,increase_quantity:float) -> RawMaterialOrderInDB:
         from modules.RawMaterialOrder.RawMaterialOrder_sqlstaments import INCREASE_QUANTITY_RAW_MATERIAL_ORDER
         current_time = datetime.now()
