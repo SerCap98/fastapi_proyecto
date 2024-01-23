@@ -63,14 +63,19 @@ Lista de dependencias del proyecto:
   - `isort==5.12.0`
   - `mypy==1.1.1`
 
+## Configuracion
+
+Este proyecto utiliza un archivo .env para manejar las variables de configuración. El archivo lo encontraras en la raíz del proyecto, ajústalas según tu entorno y necesidades
 
 ## Despliegue
 
-- `docker compose up --build`
+```bash
+docker compose up --build
+```
 
 ## Ejecución de Tests
-
-- `pytest`
-
+```bash
+  pytest
+```
 
 
