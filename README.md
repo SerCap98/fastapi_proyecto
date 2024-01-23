@@ -66,11 +66,11 @@ Lista de dependencias del proyecto:
 
 ## Despliegue
 
-- docker compose up --build
+- 'docker compose up --build'
 
 ## Ejecución de Tests
 
-- pytest
+- 'pytest'
 
 
 
