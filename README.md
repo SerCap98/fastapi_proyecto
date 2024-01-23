@@ -75,7 +75,7 @@ docker compose up --build
 
 ## Ejecución de Tests
 ```bash
-  pytest
+pytest
 ```
 
 
