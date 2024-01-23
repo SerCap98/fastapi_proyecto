@@ -22,13 +22,6 @@ Este proyecto es una API para un sistema automatizado de inventarios de ANIMAL F
 ## Requerimientos
 
 Lista de dependencias del proyecto:
-Entiendo que deseas presentar los requerimientos de manera más compacta en el `README`. Aquí tienes una forma de hacerlo:
-
----
-
-## Requerimientos
-
-Los requerimientos se dividen en varias categorías para facilitar la gestión:
 
 - **App**
   - `fastapi==0.88.0`
