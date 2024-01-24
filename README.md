@@ -16,11 +16,11 @@ Este proyecto es una API para un sistema automatizado de inventarios de ANIMAL F
 
 ## Requisitos y Reglas de Negocio
 
-[Documento del Proyecto](https://lucid.app/lucidchart/62490fd5-a7ff-4a58-8568-a6a9ec86031d/edit?viewport_loc=-1503%2C-461%2C4869%2C2472%2C0_0&invitationId=inv_7807fb55-47a8-4584-a66d-935f7be2bb25)
+[Documento del Proyecto](https://drive.google.com/file/d/1qxV8_SYnIX-DAWVQKtpX8a_yJYyW47u_/view?usp=drive_link)
 
 ## Diagrama ER
 
-[Diagrama ER](https://drive.google.com/file/d/1qxV8_SYnIX-DAWVQKtpX8a_yJYyW47u_/view?usp=drive_link)
+[Diagrama ER](https://lucid.app/lucidchart/62490fd5-a7ff-4a58-8568-a6a9ec86031d/edit?viewport_loc=-1503%2C-461%2C4869%2C2472%2C0_0&invitationId=inv_7807fb55-47a8-4584-a66d-935f7be2bb25)
 
 
 ## Requerimientos
