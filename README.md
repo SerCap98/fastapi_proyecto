@@ -67,6 +67,11 @@ Lista de dependencias del proyecto:
 
 Este proyecto utiliza un archivo .env para manejar las variables de configuración. El archivo lo encontraras en la raíz del proyecto, ajústalas según tu entorno y necesidades
 
+## Credenciales por Defecto
+
+- `Usuario: super_admin`
+- `Contraseña: Admin_53cr370`
+
 ## Despliegue
 
 ```bash
