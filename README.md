@@ -73,6 +73,12 @@ Este proyecto utiliza un archivo .env para manejar las variables de configuraci√
 docker compose up --build
 ```
 
+## Ejecucion de Migraciones
+
+```bash
+alembic upgrade head
+```
+
 ## Ejecuci√≥n de Tests
 ```bash
 pytest
